@@ -6,9 +6,9 @@ function App() {
   
 
   return (
-    <Routes>
-      <Route path='/pages' element={<MainPage />}/>
-    </Routes>
+      <Routes>
+        <Route path='' element={<MainPage />}/>
+      </Routes>
   )
 }
 

@@ -26,5 +26,4 @@ func main() {
 		panic(err)
 	}
 	fmt.Println("conectado ao mongodb")
-	client.
 }
