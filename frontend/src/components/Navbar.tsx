@@ -7,6 +7,7 @@ function Navbar() {
         </div>
 
         <div className="flex items-center ml-auto">
+          <button className="text-2xl font-bold mr-4 hover:cursor-pointer">Login</button>
           <h1 className="text-2xl font-bold">Why us</h1>
         </div>
       </header>
