@@ -1,10 +1,17 @@
-import FeatureCard from "../components/FeatureCard";
+import FeatureCarousel from "../components/FeatureCarousel";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
 
 function click() {
   console.log("clicked");
 }
+
+
+const features = [
+  {icon:"🏎️", title:"Fast", description:"Add tasks and notes in real time"},
+  {icon:"🎯", title:"Focused", description:"Minimalist design and no distractions"},
+  {icon:"🔒", title:"Safe", description:"No one in earth will have acess to your notes"}
+]
 
 function MainPage() {
   return (
@@ -16,9 +23,7 @@ function MainPage() {
         buttonLabel="Start NOW. 100% free."
         onButtonClick={click}
       />
-      <FeatureCard icon="🏎️" title="Fast" description="Add tasks and notes in real time"/>
-      <FeatureCard icon="🔒" title="Safe" description="No one in earth will have acess to your notes"/>
-      <FeatureCard icon="🎯" title="Focused" description="Minimalist design and no distractions"/>
+      <FeatureCarousel features={features}/>
     </div>
   );
 }
