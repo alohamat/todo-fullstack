@@ -10,13 +10,17 @@ function click() {
 const features = [
   {icon:"🏎️", title:"Fast", description:"Add tasks and notes in real time"},
   {icon:"🎯", title:"Focused", description:"Minimalist design and no distractions"},
-  {icon:"🔒", title:"Safe", description:"No one in earth will have acess to your notes"}
+  {icon:"🔒", title:"Safe", description:"No one in earth will have acess to your notes"},
+  {icon:"🤖", title:"AI", description:"Our powerful AI can be your creativity copilot"},
+  {icon:"☁️", title:"Cloud", description:"You can acess your notes from anywhere"},
+  {icon:"⬇️", title:"Imports", description:"You can import and export your notes"},
+  {icon:"😄", title:"Friendly", description:"Simple and easy to use"}
 ]
 
 function MainPage() {
   return (
     <div className="bg-zinc-800 min-h-screen min-w-screen">
-      <Navbar />
+      <Navbar isLoggedIn={false}/>
       <HeroSection
         title="Organize your life like a monk"
         description="Simple, fast and beautiful."

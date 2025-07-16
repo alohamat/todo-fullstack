@@ -12,7 +12,7 @@ type FeatureCarouselProps = {
 
 function FeatureCarousel({ features }: FeatureCarouselProps) {
     // Repeat features enough times to fill the marquee and make it feel infinite
-    const repeatCount = 10;
+    const repeatCount = 12;
     const repeatedFeatures = Array.from({ length: repeatCount }, () => features).flat();
 
     return (
