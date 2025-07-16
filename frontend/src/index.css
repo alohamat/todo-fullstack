@@ -4,3 +4,11 @@ body, html, #root{
     margin: 0;
     padding: 0;
 }
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 100s linear infinite;
+}
