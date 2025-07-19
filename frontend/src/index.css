@@ -10,5 +10,5 @@ body, html, #root{
 }
 
 .animate-marquee {
-  animation: marquee 100s linear infinite;
+  animation: marquee 250s linear infinite;
 }
