@@ -12,7 +12,9 @@ type FormData = {
 
 function AuthForm() {
   function onSubmit(data: object) {
+    console.log(data);
     if (isRegistering) {
+
     } else {
     }
   }
@@ -23,7 +25,7 @@ function AuthForm() {
     <div className="">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="transition-all duration-300 ease-out  shadow-md p-4 bg-blue-300 rounded-3xl mx-auto flex flex-col gap-4 items-center w-[25vw]"
+        className="transition-all duration-300 ease-out  shadow-md p-4 bg-zinc-400 rounded-3xl mx-auto flex flex-col gap-4 items-center max-w-[400px]"
         style={{
           height: isRegistering ? "320px" : "180px", // valores grandes o suficiente
         }}
@@ -32,6 +34,7 @@ function AuthForm() {
           <LabelForm htmlFor="useremail">E-mail</LabelForm>
           <InputForm
             id="useremail"
+            type="text"
             {...register("useremail", { required: "Please input an e-mail" })}
           />
         </div>
@@ -39,6 +42,7 @@ function AuthForm() {
           <LabelForm htmlFor="userpassword">Password</LabelForm>
           <InputForm
             id="userpassword"
+            type="password"
             {...register("userpassword", {
               required: "Please input a password",
             })}
@@ -72,7 +76,7 @@ function AuthForm() {
       </form>
       <button
         onClick={() => setRegistering(!isRegistering)}
-        className="bg-amber-300 hover:cursor-pointer hover:bg-amber-600 p-2 rounded-2xl transition ease-in-out"
+        className="bg-amber-300 hover:cursor-pointer hover:bg-amber-600 p-2 rounded-2xl transition ease-in-out mt-4"
       >
         {isRegistering
           ? "Already have an account? Login"
