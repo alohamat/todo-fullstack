@@ -1,6 +1,7 @@
 import FeatureCarousel from "../components/FeatureCarousel";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
+import Footer from "../components/Footer";
 
 function click() {
   console.log("clicked");
@@ -20,7 +21,7 @@ const features = [
 function MainPage() {
   return (
     <div className="bg-zinc-800 min-h-screen min-w-screen">
-      <Navbar isLoggedIn={false}/>
+      <Navbar isLoggedIn={false} centerText=""/>
       <HeroSection
         title="Organize your life like a monk"
         description="Simple, fast and beautiful."
@@ -28,6 +29,7 @@ function MainPage() {
         onButtonClick={click}
       />
       <FeatureCarousel features={features}/>
+      <Footer/>
     </div>
   );
 }
