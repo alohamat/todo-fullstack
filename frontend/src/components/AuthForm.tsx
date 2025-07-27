@@ -1,20 +1,23 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import axios from "axios";
 import InputForm from "./InputForm";
 import LabelForm from "./LabelForm";
 
 type FormData = {
   username: string;
-  useremail: string;
-  userpassword: string;
-  userconfirmpass: string;
+  email: string;
+  password: string;
+  confirmpassword: string;
 };
 
 function AuthForm() {
   function onSubmit(data: object) {
-    console.log(data);
+    console.log("called submit");
     if (isRegistering) {
-
+      axios.post("http://localhost:8080/api/register", data);
+      console.log("sent to backend: ", data);
+      
     } else {
     }
   }
@@ -35,7 +38,7 @@ function AuthForm() {
           <InputForm
             id="useremail"
             type="text"
-            {...register("useremail", { required: "Please input an e-mail" })}
+            {...register("email", { required: "Please input an e-mail" })}
           />
         </div>
         <div className="flex items-center gap-2 w-full">
@@ -43,7 +46,7 @@ function AuthForm() {
           <InputForm
             id="userpassword"
             type="password"
-            {...register("userpassword", {
+            {...register("password", {
               required: "Please input a password",
             })}
           />
@@ -53,7 +56,7 @@ function AuthForm() {
             <LabelForm htmlFor="userconfirmpass"><img src="src/assets/lockform.png" alt="icon" className="size-5"/> Confirm password</LabelForm>
             <InputForm
               id="userconfirmpass"
-              {...register("userconfirmpass", {
+              {...register("confirmpassword", {
                 required: "Please confirm your password",
               })}
             />
