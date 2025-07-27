@@ -31,7 +31,7 @@ function AuthForm() {
         }}
       >
         <div className="flex items-center gap-2 w-full">
-          <LabelForm htmlFor="useremail">E-mail</LabelForm>
+          <LabelForm htmlFor="useremail"><img src="src/assets/emailform.png" alt="icon" className="size-5" /> E-mail</LabelForm>
           <InputForm
             id="useremail"
             type="text"
@@ -39,7 +39,7 @@ function AuthForm() {
           />
         </div>
         <div className="flex items-center gap-2 w-full">
-          <LabelForm htmlFor="userpassword">Password</LabelForm>
+          <LabelForm htmlFor="userpassword"><img src="src/assets/lockform.png" alt="icon" className="size-5" /> Password</LabelForm>
           <InputForm
             id="userpassword"
             type="password"
@@ -50,7 +50,7 @@ function AuthForm() {
         </div>
         {isRegistering ? (
           <div className="flex items-center gap-2 w-full">
-            <LabelForm htmlFor="userconfirmpass">Confirm password</LabelForm>
+            <LabelForm htmlFor="userconfirmpass"><img src="src/assets/lockform.png" alt="icon" className="size-5"/> Confirm password</LabelForm>
             <InputForm
               id="userconfirmpass"
               {...register("userconfirmpass", {
@@ -61,7 +61,7 @@ function AuthForm() {
         ) : null}
         {isRegistering ? (
           <div className="flex items-center gap-2 w-full">
-            <LabelForm htmlFor="username">Name</LabelForm>
+            <LabelForm htmlFor="username"><img src="src/assets/userform.png" alt="icon" className="size-5" /> Name</LabelForm>
             <InputForm
               id="username"
               {...register("username", {
@@ -70,13 +70,13 @@ function AuthForm() {
             />
           </div>
         ) : null}
-        <button className="bg-amber-300 hover:cursor-pointer hover:bg-amber-600 p-2 rounded-2xl transition ease-in-out">
+        <button className="bg-amber-300 hover:cursor-pointer hover:bg-amber-600 p-2 rounded-2xl transition ease-in-out font-medium">
           {isRegistering ? "Register" : "Login"}
         </button>
       </form>
       <button
         onClick={() => setRegistering(!isRegistering)}
-        className="bg-amber-300 hover:cursor-pointer hover:bg-amber-600 p-2 rounded-2xl transition ease-in-out mt-4"
+        className="bg-amber-300 hover:cursor-pointer hover:bg-amber-600 p-2 rounded-2xl transition ease-in-out mt-4 font-medium"
       >
         {isRegistering
           ? "Already have an account? Login"

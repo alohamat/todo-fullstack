@@ -21,7 +21,7 @@ const features = [
 function MainPage() {
   return (
     <div className="bg-zinc-800 min-h-screen min-w-screen">
-      <Navbar isLoggedIn={false} centerText=""/>
+      <Navbar isLoggedIn={false} />
       <HeroSection
         title="Organize your life like a monk"
         description="Simple, fast and beautiful."
