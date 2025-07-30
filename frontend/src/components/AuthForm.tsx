@@ -9,16 +9,21 @@ type FormData = {
   email: string;
   password: string;
   confirmpassword: string;
+  isregistering: boolean;
 };
 
 function AuthForm() {
-  function onSubmit(data: object) {
+  async function onSubmit(data: FormData) {
     console.log("called submit");
     if (isRegistering) {
-      axios.post("http://localhost:8080/api/register", data);
+      data.isregistering = true;
       console.log("sent to backend: ", data);
-      
+      const res = await axios.post("http://localhost:8080/api/register", data);
+      console.log("backend response: ", res);
     } else {
+      data.isregistering = false;
+      const res = await axios.post("http://localhost:8080/api/login", data);
+      console.log("backend response: ", res)
     }
   }
 
@@ -34,7 +39,10 @@ function AuthForm() {
         }}
       >
         <div className="flex items-center gap-2 w-full">
-          <LabelForm htmlFor="useremail"><img src="src/assets/emailform.png" alt="icon" className="size-5" /> E-mail</LabelForm>
+          <LabelForm htmlFor="useremail">
+            <img src="src/assets/emailform.png" alt="icon" className="size-5" />{" "}
+            E-mail
+          </LabelForm>
           <InputForm
             id="useremail"
             type="text"
@@ -42,7 +50,10 @@ function AuthForm() {
           />
         </div>
         <div className="flex items-center gap-2 w-full">
-          <LabelForm htmlFor="userpassword"><img src="src/assets/lockform.png" alt="icon" className="size-5" /> Password</LabelForm>
+          <LabelForm htmlFor="userpassword">
+            <img src="src/assets/lockform.png" alt="icon" className="size-5" />{" "}
+            Password
+          </LabelForm>
           <InputForm
             id="userpassword"
             type="password"
@@ -53,7 +64,14 @@ function AuthForm() {
         </div>
         {isRegistering ? (
           <div className="flex items-center gap-2 w-full">
-            <LabelForm htmlFor="userconfirmpass"><img src="src/assets/lockform.png" alt="icon" className="size-5"/> Confirm password</LabelForm>
+            <LabelForm htmlFor="userconfirmpass">
+              <img
+                src="src/assets/lockform.png"
+                alt="icon"
+                className="size-5"
+              />{" "}
+              Confirm password
+            </LabelForm>
             <InputForm
               id="userconfirmpass"
               {...register("confirmpassword", {
@@ -64,7 +82,14 @@ function AuthForm() {
         ) : null}
         {isRegistering ? (
           <div className="flex items-center gap-2 w-full">
-            <LabelForm htmlFor="username"><img src="src/assets/userform.png" alt="icon" className="size-5" /> Name</LabelForm>
+            <LabelForm htmlFor="username">
+              <img
+                src="src/assets/userform.png"
+                alt="icon"
+                className="size-5"
+              />{" "}
+              Name
+            </LabelForm>
             <InputForm
               id="username"
               {...register("username", {
