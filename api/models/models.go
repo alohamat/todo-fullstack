@@ -1,14 +1,12 @@
 package models
 
-type Item struct {
+type RegisterUser struct {
 	Nome string `json:"nome"`
-	Tempo DataDetalhes `json:"tempo"`
-	Preco int `json:"preco"`
+	Email string `json:"email"`
+	Password string `json:"password"`
 }
 
-type DataDetalhes struct {
-	Horas int `json:"horas"`
-	Minutos int `json:"minutos"`
-	Segundos int `json:"segundos"`
-	Anos int `json:"anos"`
+type LoginUser struct {
+	Email string `json:"email"`
+	Password string `json:"password"`
 }

@@ -25,5 +25,5 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("conectado ao mongodb")
+	fmt.Println("conectado ao mongodb", client)
 }

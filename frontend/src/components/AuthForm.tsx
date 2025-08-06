@@ -1,72 +1,102 @@
-import { useForm } from "react-hook-form";
-import { useState } from "react";
+import React, { useState } from "react";
 import InputForm from "./InputForm";
+import AuthService from "../services/AuthService";
 import LabelForm from "./LabelForm";
 
-type FormData = {
-  username: string;
-  useremail: string;
-  userpassword: string;
-  userconfirmpass: string;
-};
+function incorrectPassword() {}
+
+const [isRegistering, setRegistering] = useState(false);
+const [username, setUsername] = useState("");
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+const [confirm, setConfirm] = useState("");
 
 function AuthForm() {
-  function onSubmit(data: object) {
-    console.log(data);
-    if (isRegistering) {
-
-    } else {
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    try {
+      if (isRegistering) {
+        if (password != confirm) {
+          incorrectPassword();
+          return;
+        }
+        const res = await AuthService.RegisterService({ username, email, password });
+        if (res.sucess) {
+          alert("registered");
+        }
+      } else {
+        const res = await AuthService.LoginService({ email, password });
+        if (res.sucess) {
+          alert("logged");
+        }
+      }
+    } catch (err) {
+      console.error(`submit error: ${err}`);
     }
   }
 
-  const [isRegistering, setRegistering] = useState(false);
-  const { register, handleSubmit } = useForm<FormData>();
   return (
     <div className="">
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit}
         className="transition-all duration-300 ease-out  shadow-md p-4 bg-zinc-400 rounded-3xl mx-auto flex flex-col gap-4 items-center max-w-[400px]"
         style={{
-          height: isRegistering ? "320px" : "180px", // valores grandes o suficiente
+          height: isRegistering ? "320px" : "180px",
         }}
       >
         <div className="flex items-center gap-2 w-full">
-          <LabelForm htmlFor="useremail"><img src="src/assets/emailform.png" alt="icon" className="size-5" /> E-mail</LabelForm>
+          <LabelForm htmlFor="useremail">
+            <img src="src/assets/emailform.png" alt="icon" className="size-5" />{" "}
+            E-mail
+          </LabelForm>
           <InputForm
             id="useremail"
             type="text"
-            {...register("useremail", { required: "Please input an e-mail" })}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className="flex items-center gap-2 w-full">
-          <LabelForm htmlFor="userpassword"><img src="src/assets/lockform.png" alt="icon" className="size-5" /> Password</LabelForm>
+          <LabelForm htmlFor="userpassword">
+            <img src="src/assets/lockform.png" alt="icon" className="size-5" />{" "}
+            Password
+          </LabelForm>
           <InputForm
             id="userpassword"
             type="password"
-            {...register("userpassword", {
-              required: "Please input a password",
-            })}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         {isRegistering ? (
           <div className="flex items-center gap-2 w-full">
-            <LabelForm htmlFor="userconfirmpass"><img src="src/assets/lockform.png" alt="icon" className="size-5"/> Confirm password</LabelForm>
+            <LabelForm htmlFor="userconfirmpass">
+              <img
+                src="src/assets/lockform.png"
+                alt="icon"
+                className="size-5"
+              />{" "}
+              Confirm password
+            </LabelForm>
             <InputForm
               id="userconfirmpass"
-              {...register("userconfirmpass", {
-                required: "Please confirm your password",
-              })}
+              type="password"
+              onChange={(e) => setConfirm(e.target.value)}
             />
           </div>
         ) : null}
         {isRegistering ? (
           <div className="flex items-center gap-2 w-full">
-            <LabelForm htmlFor="username"><img src="src/assets/userform.png" alt="icon" className="size-5" /> Name</LabelForm>
+            <LabelForm htmlFor="username">
+              <img
+                src="src/assets/userform.png"
+                alt="icon"
+                className="size-5"
+              />{" "}
+              Name
+            </LabelForm>
             <InputForm
               id="username"
-              {...register("username", {
-                required: "Please input an username",
-              })}
+              type="text"
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
         ) : null}
