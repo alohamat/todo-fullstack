@@ -9,6 +9,9 @@ import (
 func InitRouter() *mux.Router {
 	router := mux.NewRouter()
 	router.Use(middlewares.CorsMiddleware)
-	router.HandleFunc("/api/register/", handlers.RegisterHandler).Methods("POST")
+
+	router.HandleFunc("/api/register", handlers.RegisterHandler).Methods("POST")
+	router.HandleFunc("/api/login", handlers.LoginHandler).Methods("POST")
+	
 	return router
 }

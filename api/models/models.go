@@ -1,7 +1,7 @@
 package models
 
 type RegisterUser struct {
-	Nome string `json:"nome"`
+	Name string `json:"username"`
 	Email string `json:"email"`
 	Password string `json:"password"`
 }

@@ -1,17 +1,21 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import InputForm from "./InputForm";
 import AuthService from "../services/AuthService";
 import LabelForm from "./LabelForm";
 
-function incorrectPassword() {}
 
-const [isRegistering, setRegistering] = useState(false);
-const [username, setUsername] = useState("");
-const [email, setEmail] = useState("");
-const [password, setPassword] = useState("");
-const [confirm, setConfirm] = useState("");
 
 function AuthForm() {
+  function incorrectPassword() {
+    console.log("incorrect password: ", password, " ", confirm);
+  }
+
+  const [isRegistering, setRegistering] = useState(false);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     try {
@@ -21,12 +25,12 @@ function AuthForm() {
           return;
         }
         const res = await AuthService.RegisterService({ username, email, password });
-        if (res.sucess) {
+        if (res.success) {
           alert("registered");
         }
       } else {
         const res = await AuthService.LoginService({ email, password });
-        if (res.sucess) {
+        if (res.success) {
           alert("logged");
         }
       }

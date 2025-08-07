@@ -12,15 +12,21 @@ type LoginUser = {
 };
 
 async function RegisterService({ username, email, password }: RegisterUser) {
+  console.log("register called");
   try {
     const req = await api.post("/register", {
       username,
       email,
       password,
     });
-    return { sucess : true, data: req.data};
+    if (req.status === 200) {
+      return { success : true, data: req.data};
+    }
+    else {
+      return { success : false, err: "unexpected error"};
+    }
   } catch (err) {
-    return { sucess : false, err};
+    return { success : false, err};
   }
 }
 async function LoginService({ email, password }: LoginUser) {
@@ -29,9 +35,9 @@ async function LoginService({ email, password }: LoginUser) {
       email,
       password,
     });
-    return { sucess : true, data: req.data};
+    return { success : true, data: req.data};
   } catch (err) {
-    return { sucess : false, err};
+    return { success : false, err};
   }
 }
 
