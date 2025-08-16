@@ -1,4 +1,3 @@
-import { useForm } from "react-hook-form";
 import { useState } from "react";
 import axios from "axios";
 import InputForm from "./InputForm";
@@ -16,23 +15,26 @@ function AuthForm() {
   async function onSubmit(data: FormData) {
     console.log("called submit");
     if (isRegistering) {
-      data.isregistering = true;
       console.log("sent to backend: ", data);
       const res = await axios.post("http://localhost:8080/api/register", data);
       console.log("backend response: ", res);
     } else {
-      data.isregistering = false;
       const res = await axios.post("http://localhost:8080/api/login", data);
-      console.log("backend response: ", res)
+      console.log("backend response: ", res);
     }
   }
 
   const [isRegistering, setRegistering] = useState(false);
-  const { register, handleSubmit } = useForm<FormData>();
+  const [form, setForm] = useState<FormData>({
+    username: "",
+    email: "",
+    password: "",
+    confirmpassword: "",
+    isregistering: false,
+  });
   return (
     <div className="">
       <form
-        onSubmit={handleSubmit(onSubmit)}
         className="transition-all duration-300 ease-out  shadow-md p-4 bg-zinc-400 rounded-3xl mx-auto flex flex-col gap-4 items-center max-w-[400px]"
         style={{
           height: isRegistering ? "320px" : "180px", // valores grandes o suficiente
@@ -46,7 +48,7 @@ function AuthForm() {
           <InputForm
             id="useremail"
             type="text"
-            {...register("email", { required: "Please input an e-mail" })}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
           />
         </div>
         <div className="flex items-center gap-2 w-full">
@@ -57,9 +59,7 @@ function AuthForm() {
           <InputForm
             id="userpassword"
             type="password"
-            {...register("password", {
-              required: "Please input a password",
-            })}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
           />
         </div>
         {isRegistering ? (
@@ -74,9 +74,8 @@ function AuthForm() {
             </LabelForm>
             <InputForm
               id="userconfirmpass"
-              {...register("confirmpassword", {
-                required: "Please confirm your password",
-              })}
+              type="password"
+              onChange={(e) => setForm({ ...form, confirmpassword: e.target.value })}
             />
           </div>
         ) : null}
@@ -92,13 +91,17 @@ function AuthForm() {
             </LabelForm>
             <InputForm
               id="username"
-              {...register("username", {
-                required: "Please input an username",
-              })}
+              onChange={(e) => setForm({ ...form, username: e.target.value })}
             />
           </div>
         ) : null}
-        <button className="bg-amber-300 hover:cursor-pointer hover:bg-amber-600 p-2 rounded-2xl transition ease-in-out font-medium">
+        <button
+          className="bg-amber-300 hover:cursor-pointer hover:bg-amber-600 p-2 rounded-2xl transition ease-in-out font-medium"
+          onClick={(e) => {
+            e.preventDefault();
+            onSubmit(form);
+          }}
+        >
           {isRegistering ? "Register" : "Login"}
         </button>
       </form>
