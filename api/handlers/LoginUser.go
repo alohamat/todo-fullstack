@@ -12,7 +12,8 @@ func LoginHandler (w http.ResponseWriter, r *http.Request) {
 	var userData models.LoginUser
 	err := json.NewDecoder(r.Body).Decode(&userData)
 	if err != nil {
-		log.Fatal("malformed data")
+		log.Println("malformed data")
+		return
 	}
 	log.Println("Email: ", userData.Email, " Password: ", userData.Password)
 

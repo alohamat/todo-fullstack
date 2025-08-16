@@ -1,29 +1,40 @@
 package db
 
 import (
-	"fmt"
 	"context"
+	"log"
 	"os"
+	"time"
 
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func main() {
+var Client *mongo.Client
+
+func InitMongo() *mongo.Client {
 	err := godotenv.Load()
 	if err != nil {
-		fmt.Println("falha, verifique se tens o .env")
+		log.Fatal("error, check your .env")
 	}
 	MONGO_URI := os.Getenv("MONGO_URI")
 	if MONGO_URI == "" {
-		fmt.Println("URI não encontrada no .env")
+		log.Fatal("uri not found in .env")
 	}
-	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	
 	clientOptions := options.Client().ApplyURI(MONGO_URI)
 	client, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("conectado ao mongodb", client)
+	log.Println("connected to mongodb", client)
+	Client = client
+	return Client
+}
+
+func Collection(dbName, collName string) *mongo.Collection {
+	return Client.Database(dbName).Collection(collName)
 }
