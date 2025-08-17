@@ -9,6 +9,7 @@ import (
 
 	"github.com/alohamat/todo-fullstack/models"
 	"github.com/alohamat/todo-fullstack/db"
+	"github.com/alohamat/todo-fullstack/services"
 )
 
 
@@ -23,21 +24,25 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 
 	usersCollection := db.Collection("todoDB", "usersCollection")
 	repo := db.Repository{Collection: usersCollection}
+	hash, salt := services.HashPassword(userData.Password)
+
 	success, err := repo.Insert(bson.M{
 		"email": userData.Email,
-		"password": userData.Password,
 		"username": userData.Username,
+		"password": hash,
+		"salt": salt,
 	})
-	if (err != nil) {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("internal server error"))
-		return
-	}
 	if (!success) {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("email already created"))
 		return
 	}
+	if (err != nil) {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("internal server error"))
+		return
+	}
+
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte("user created"))
 }

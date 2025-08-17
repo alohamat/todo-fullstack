@@ -2,7 +2,9 @@ package services
 
 import (
 	"crypto/rand"
+	"crypto/sha256"
 	"encoding/base64"
+	"encoding/hex"
 	"log"
 	"os"
 
@@ -10,7 +12,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func GenerateSalt(n int) string {
+func generateSalt(n int) string {
 	b := make([]byte, n)
 	_, err := rand.Read(b)
 	if err != nil {
@@ -27,10 +29,12 @@ func HashPassword(password string) (string, string) {
 	}
 	pepper := os.Getenv("PEPPER")
 
-	salt := GenerateSalt(16)
+	salt := generateSalt(16)
 	passwordWithSaltAndPepper := password + salt + pepper
+	digest := sha256.Sum256([]byte(passwordWithSaltAndPepper))
+	hashedInput := hex.EncodeToString(digest[:])
 
-	hash, err := bcrypt.GenerateFromPassword([]byte(passwordWithSaltAndPepper), bcrypt.DefaultCost)
+	hash, err := bcrypt.GenerateFromPassword([]byte(hashedInput), bcrypt.DefaultCost)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -47,8 +51,10 @@ func CheckPassword(password, salt, hash string) bool {
 	pepper := os.Getenv("PEPPER")
 
 	passwordWithSaltAndPepper := password + salt + pepper
+	digest := sha256.Sum256([]byte(passwordWithSaltAndPepper))
+	hashedInput := hex.EncodeToString(digest[:])
 
-	err = bcrypt.CompareHashAndPassword([]byte(hash), []byte(passwordWithSaltAndPepper))
+	err = bcrypt.CompareHashAndPassword([]byte(hash), []byte(hashedInput))
 	return err == nil
 }
 

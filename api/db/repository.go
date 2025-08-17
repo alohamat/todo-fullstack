@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"time"
 
@@ -21,31 +20,22 @@ func ctx() (context.Context, context.CancelFunc) {
 func (r *Repository) Insert(doc bson.M) (bool, error) {
 	ctx, cancel := ctx()
 	defer cancel()
-	emailVal, ok := doc["email"].(string)
-	
-	if (!ok) {
-		return false, fmt.Errorf("document missing email")
-	}
-
-	exists, err := r.Exists(emailVal)
-	if (err != nil) {
-		return false, err
-	}
-
-	if (exists) {
-		return false, fmt.Errorf("user with email %s already exists", emailVal)
-	}
 
 	res, err := r.Collection.InsertOne(ctx, doc)
-	if (err != nil) {
+	if err != nil {
+		if (mongo.IsDuplicateKeyError(err)) {
+			log.Println("duplicate email")
+			return false, err
+		}
+		log.Println("insert error")
 		return false, err
 	}
-
+	
 	log.Println("new user created ", res.InsertedID)
 	return true, nil
 }
 
-func (r *Repository) Exists (email string) (bool, error) {
+func (r *Repository) EmailExists (email string) (bool, error) {
 	ctx, cancel := ctx()
 	defer cancel()
 	filter := bson.M{"email" : email}
