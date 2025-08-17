@@ -4,11 +4,12 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 
-	"github.com/alohamat/todo-fullstack/models"
 	"github.com/alohamat/todo-fullstack/db"
+	"github.com/alohamat/todo-fullstack/models"
 	"github.com/alohamat/todo-fullstack/services"
 )
 
@@ -31,6 +32,8 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		"username": userData.Username,
 		"password": hash,
 		"salt": salt,
+		"createdAt": time.Now(),
+		"updatedAt": time.Now(),
 	})
 	if (!success) {
 		w.WriteHeader(http.StatusBadRequest)

@@ -5,6 +5,8 @@ import (
 	"log"
 	"time"
 
+	"github.com/alohamat/todo-fullstack/models"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -15,6 +17,20 @@ type Repository struct {
 
 func ctx() (context.Context, context.CancelFunc) {
     return context.WithTimeout(context.Background(), 5*time.Second)
+}
+
+
+
+func (r* Repository) FindEmail(email string) (*models.User, error) {
+	ctx, cancel := ctx()
+	defer cancel()
+	var user models.User
+
+	err := r.Collection.FindOne(ctx, bson.M{"email": email}).Decode(&user)
+	if (err != nil) {
+		return nil, err
+	}
+	return &user, nil
 }
 
 func (r *Repository) Insert(doc bson.M) (bool, error) {

@@ -1,12 +1,13 @@
 package handlers
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
-	"encoding/json"
 
-	"github.com/alohamat/todo-fullstack/models"
 	"github.com/alohamat/todo-fullstack/db"
+	"github.com/alohamat/todo-fullstack/models"
+	"github.com/alohamat/todo-fullstack/services"
 )
 
 func LoginHandler (w http.ResponseWriter, r *http.Request) {
@@ -33,5 +34,19 @@ func LoginHandler (w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
+	user, err := repo.FindEmail(userData.Email)
+	if (err != nil) {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	
+	valid := services.CheckPassword(userData.Password, user.Salt, user.Password)
+	if (!valid) {
+		w.WriteHeader(http.StatusBadRequest)
+		log.Println("wrong password")
+		return
+	}
+	w.WriteHeader(http.StatusAccepted)
+	log.Println("logged in!")
 	
 }

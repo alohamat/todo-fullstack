@@ -1,5 +1,11 @@
 package models
 
+import (
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
+
 type RegisterUser struct {
 	Email string `json:"email"`
 	Password string `json:"password"`
@@ -8,4 +14,13 @@ type RegisterUser struct {
 type LoginUser struct {
 	Email string `json:"email"`
 	Password string `json:"password"`
+}
+type User struct {
+	_id primitive.ObjectID `bson:"_id,omitempty"`
+	Email string `bson:"email"`
+	Username string `bson:"username"`
+	Password string `bson:"password"`
+	Salt string `bson:"salt"`
+	CreatedAt time.Time `bson:"createdAt"`
+	UpdatedAt time.Time `bson:"updatedAt"`
 }
