@@ -2,12 +2,11 @@ package db
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"github.com/alohamat/todo-fullstack/models"
-
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -15,52 +14,65 @@ type Repository struct {
 	Collection *mongo.Collection
 }
 
-func ctx() (context.Context, context.CancelFunc) {
-    return context.WithTimeout(context.Background(), 5*time.Second)
+func newCtx() (context.Context, context.CancelFunc) {
+	return context.WithTimeout(context.Background(), 5*time.Second)
 }
 
-
-
-func (r* Repository) FindEmail(email string) (*models.User, error) {
-	ctx, cancel := ctx()
+func (r *Repository) InsertUser(user *models.User) (primitive.ObjectID, error) {
+	ctx, cancel := newCtx()
 	defer cancel()
-	var user models.User
 
+	now := time.Now()
+	if user.CreatedAt.IsZero() {
+		user.CreatedAt = now
+	}
+	user.UpdatedAt = now
+
+	res, err := r.Collection.InsertOne(ctx, user)
+	if err != nil {
+		return primitive.NilObjectID, err
+	}
+
+	oid, ok := res.InsertedID.(primitive.ObjectID)
+	if !ok {
+		return primitive.NilObjectID, err
+	}
+	return oid, nil
+}
+
+func (r *Repository) FindByEmail(email string) (*models.User, error) {
+	ctx, cancel := newCtx()
+	defer cancel()
+
+	var user models.User
 	err := r.Collection.FindOne(ctx, bson.M{"email": email}).Decode(&user)
-	if (err != nil) {
+	if err != nil {
 		return nil, err
 	}
 	return &user, nil
 }
 
-func (r *Repository) Insert(doc bson.M) (bool, error) {
-	ctx, cancel := ctx()
-	defer cancel()
-
-	res, err := r.Collection.InsertOne(ctx, doc)
-	if err != nil {
-		if (mongo.IsDuplicateKeyError(err)) {
-			log.Println("duplicate email")
-			return false, err
-		}
-		log.Println("insert error")
-		return false, err
-	}
-	
-	log.Println("new user created ", res.InsertedID)
-	return true, nil
+func (r *Repository) SaveRefreshToken(ctx context.Context, token *models.RefreshToken) error {
+	_, err := r.Collection.InsertOne(ctx, token)
+	return err
 }
 
-func (r *Repository) EmailExists (email string) (bool, error) {
-	ctx, cancel := ctx()
+func (r *Repository) FindRefreshToken(token string) (*models.RefreshToken, error) {
+	ctx, cancel := newCtx()
 	defer cancel()
-	filter := bson.M{"email" : email}
-	err := r.Collection.FindOne(ctx, filter).Err()
-	if (err == mongo.ErrNoDocuments) {
-		return false, nil
+
+	var rt models.RefreshToken
+	err := r.Collection.FindOne(ctx, bson.M{"token": token}).Decode(&rt)
+	if err != nil {
+		return nil, err
 	}
-	if (err != nil) {
-		return false, err
-	}
-	return true, nil
+	return &rt, nil
+}
+
+func (r *Repository) DeleteRefreshToken(token string) error {
+	ctx, cancel := newCtx()
+	defer cancel()
+
+	_, err := r.Collection.DeleteOne(ctx, bson.M{"token": token})
+	return err
 }

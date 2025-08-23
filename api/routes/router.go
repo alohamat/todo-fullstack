@@ -10,7 +10,12 @@ func InitRouter() *mux.Router {
 	router := mux.NewRouter()
 	router.Use(middlewares.CorsMiddleware)
 
-	router.HandleFunc("/api/register", handlers.RegisterHandler)
-	router.HandleFunc("/api/login", handlers.LoginHandler)
+	// public routes
+	router.HandleFunc("/api/register", handlers.RegisterHandler).Methods("POST")
+	router.HandleFunc("/api/login", handlers.LoginHandler).Methods("POST")
+
+	// protected routes
+	protected := router.PathPrefix("/api").Subrouter()
+	
 	return router
 }
