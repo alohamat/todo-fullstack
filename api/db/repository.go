@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type Repository struct {
@@ -53,7 +54,20 @@ func (r *Repository) FindByEmail(email string) (*models.User, error) {
 }
 
 func (r *Repository) SaveRefreshToken(ctx context.Context, token *models.RefreshToken) error {
-	_, err := r.Collection.InsertOne(ctx, token)
+	filter := bson.M{"user_id": token.UserID}
+	update := bson.M{
+		"$set": bson.M{
+			"token": token.Token,
+			"expiresAt": token.ExpiresAt,
+		},
+	}
+
+	_, err := r.Collection.UpdateOne(
+		ctx,
+		filter,
+		update,
+		options.Update().SetUpsert(true),
+	)
 	return err
 }
 

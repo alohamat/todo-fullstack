@@ -30,7 +30,7 @@ func InitMongo() *mongo.Client {
 	if err != nil {
 		panic(err)
 	}
-	log.Println("connected to mongodb", client)
+	log.Println("connected to mongodb")
 	Client = client
 	return Client
 }

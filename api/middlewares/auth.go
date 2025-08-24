@@ -1,14 +1,15 @@
 package middlewares
 
 import (
-    "context"
-    "fmt"
+	"context"
+	"fmt"
 	"log"
-    "net/http"
-    "os"
-    "strings"
+	"net/http"
+	"os"
+	"strings"
 
-    "github.com/golang-jwt/jwt/v5"
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/joho/godotenv"
 )
 
 var jwtKey []byte
@@ -17,9 +18,13 @@ type ctxKey string
 const userIDKey ctxKey = "userID"
 
 func init() {
+    err := godotenv.Load()
+    if (err != nil) {
+        log.Fatalln("fail to load .env")
+    }
     secret := os.Getenv("JWT_SECRET")
     if secret == "" {
-        log.Fatalln("JWT_SECRET not found in env")
+        log.Fatalln("jwt not found in .env")
     }
     jwtKey = []byte(secret)
 }

@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/alohamat/todo-fullstack/db"
 	"github.com/alohamat/todo-fullstack/models"
 	"github.com/alohamat/todo-fullstack/services"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -22,14 +21,12 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println("Login attempt for:", userData.Email)
 
-	// defines db and collection
-
-	usersCollection := db.Collection("todoDB", "usersCollection")
-	repo := db.Repository{Collection: usersCollection}
+	usersRepo := services.UsersRepo()
+	refreshRepo := services.RefreshRepo()
 
 	// tries to find email to check if user exists
 
-	user, err := repo.FindByEmail(userData.Email)
+	user, err := usersRepo.FindByEmail(userData.Email)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			http.Error(w, `{"error":"invalid credentials"}`, http.StatusUnauthorized)
@@ -74,7 +71,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		CreatedAt: time.Now(),
 	}
 
-	if err := repo.SaveRefreshToken(r.Context(), &tokenDoc); err != nil {
+	if err := refreshRepo.SaveRefreshToken(r.Context(), &tokenDoc); err != nil {
 		log.Println("error saving refresh token:", err)
 		http.Error(w, `{"error":"internal server error"}`, http.StatusInternalServerError)
 		return

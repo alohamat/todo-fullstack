@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/joho/godotenv"
 	"github.com/google/uuid"
 )
 
@@ -16,9 +17,13 @@ var (
 )
 
 func init() {
+	err := godotenv.Load()
+	if (err != nil) {
+		log.Fatalln("failed to load .env")
+	}
 	secret := os.Getenv("JWT_SECRET")
 	if (secret == "") {
-		log.Println("env didnt load")
+		log.Println("jwt not found in .env")
 	}
 	jwtKey = []byte(secret)
 }

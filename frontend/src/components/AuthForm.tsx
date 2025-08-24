@@ -8,7 +8,6 @@ type FormData = {
   email: string;
   password: string;
   confirmpassword: string;
-  isregistering: boolean;
 };
 
 function AuthForm() {
@@ -24,14 +23,15 @@ function AuthForm() {
     }
   }
 
+  
   const [isRegistering, setRegistering] = useState(false);
   const [form, setForm] = useState<FormData>({
     username: "",
     email: "",
     password: "",
     confirmpassword: "",
-    isregistering: false,
   });
+  
   return (
     <div className="">
       <form
