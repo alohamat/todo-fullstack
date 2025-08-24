@@ -18,7 +18,7 @@ func InitRouter() *mux.Router {
 	protected := router.PathPrefix("/api").Subrouter()
 	protected.Use(middlewares.AuthMiddleware)
 
-	protected.HandleFunc("/api/tasks")
+	protected.HandleFunc("/api/tasks", handlers.TasksHandler).Methods("GET")
 	
 	return router
 }
