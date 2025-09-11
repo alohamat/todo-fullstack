@@ -9,6 +9,17 @@ body, html, #root{
   100% { transform: translateX(-50%); }
 }
 
+@keyframes wrong-input {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+  0%, 100% {background-color: red;}
+}
+
 .animate-marquee {
   animation: marquee 250s linear infinite;
 }
+
+.animate-wrong-input {
+  animation: wrong-input 0.5s ease-in-out;
+} 

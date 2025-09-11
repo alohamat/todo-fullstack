@@ -10,6 +10,8 @@ type FormData = {
   confirmpassword: string;
 };
 
+
+
 function AuthForm() {
   async function onSubmit(data: FormData) {
     console.log("called submit");
@@ -18,13 +20,19 @@ function AuthForm() {
       const res = await axios.post("http://localhost:8080/api/register", data);
       console.log("backend response: ", res);
     } else {
-      const res = await axios.post("http://localhost:8080/api/login", data);
+      const res = await axios.post("http://localhost:8080/api/login", data)
+      .catch((error) => {
+        setError(error.response.data.error);
+        console.log(isError);
+        
+      })
       console.log("backend response: ", res);
     }
   }
 
   
   const [isRegistering, setRegistering] = useState(false);
+  const [isError, setError] = useState("");
   const [form, setForm] = useState<FormData>({
     username: "",
     email: "",
@@ -37,9 +45,10 @@ function AuthForm() {
       <form
         className="transition-all duration-300 ease-out  shadow-md p-4 bg-zinc-400 rounded-3xl mx-auto flex flex-col gap-4 items-center max-w-[400px]"
         style={{
-          height: isRegistering ? "320px" : "180px", // valores grandes o suficiente
+          height: isRegistering ? "320px" : "180px", // big enough values
         }}
-      >
+        >
+        {isError && <p className={"animate-wrong-input font-bold bg-amber-300 px-3 rounded-2xl"}>{isError}</p>}
         <div className="flex items-center gap-2 w-full">
           <LabelForm htmlFor="useremail">
             <img src="src/assets/emailform.png" alt="icon" className="size-5" />{" "}
@@ -107,8 +116,8 @@ function AuthForm() {
       </form>
       <button
         onClick={() => setRegistering(!isRegistering)}
-        className="bg-amber-300 hover:cursor-pointer hover:bg-amber-600 p-2 rounded-2xl transition ease-in-out mt-4 font-medium"
-      >
+        className="bg-amber-300 hover:cursor-pointer hover:bg-amber-600 p-2 rounded-2xl transition ease-in-out mt-10 font-medium"
+        >
         {isRegistering
           ? "Already have an account? Login"
           : "Don't have an account? Register"}
