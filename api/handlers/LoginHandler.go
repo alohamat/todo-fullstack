@@ -29,20 +29,20 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	user, err := usersRepo.FindByEmail(userData.Email)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			http.Error(w, `{"error":"invalid credentials"}`, http.StatusUnauthorized)
+			http.Error(w, `{"error":"Invalid credentials"}`, http.StatusUnauthorized)
 			return
 		}
 		log.Println("error finding user:", err)
-		http.Error(w, `{"error":"internal server error"}`, http.StatusInternalServerError)
+		http.Error(w, `{"error":"Internal server error"}`, http.StatusInternalServerError)
 		return
 	}
 	if user == nil {
-		http.Error(w, `{"error":"invalid credentials"}`, http.StatusUnauthorized)
+		http.Error(w, `{"error":"Invalid credentials"}`, http.StatusUnauthorized)
 		return
 	}
 
 	if !services.CheckPassword(userData.Password, user.Salt, user.Password) {
-		http.Error(w, `{"error":"invalid credentials"}`, http.StatusUnauthorized)
+		http.Error(w, `{"error":"Invalid credentials"}`, http.StatusUnauthorized)
 		return
 	}
 	
@@ -51,14 +51,14 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	access, err := services.GenerateAccessToken(user.ID.Hex()) // confirma o nome da func no services
 	if err != nil {
 		log.Println("error generating access token:", err)
-		http.Error(w, `{"error":"internal server error"}`, http.StatusInternalServerError)
+		http.Error(w, `{"error":"Internal server error"}`, http.StatusInternalServerError)
 		return
 	}
 
 	refresh, err := services.GenerateRefreshToken()
 	if err != nil {
 		log.Println("error generating refresh token:", err)
-		http.Error(w, `{"error":"internal server error"}`, http.StatusInternalServerError)
+		http.Error(w, `{"error":"Internal server error"}`, http.StatusInternalServerError)
 		return
 	}
 
@@ -73,7 +73,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err := refreshRepo.SaveRefreshToken(r.Context(), &tokenDoc); err != nil {
 		log.Println("error saving refresh token:", err)
-		http.Error(w, `{"error":"internal server error"}`, http.StatusInternalServerError)
+		http.Error(w, `{"error":"Internal server error"}`, http.StatusInternalServerError)
 		return
 	}
 
