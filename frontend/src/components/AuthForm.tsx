@@ -64,7 +64,7 @@ function AuthForm() {
         console.log(res.data);
         if (res.data.access_token && res.data.refresh_token) {
           login(res.data.access_token, res.data.refresh_token);
-          navigate("/home");
+          navigate("/dashboard");
         } else {
           setError("Invalid server response.");
         }

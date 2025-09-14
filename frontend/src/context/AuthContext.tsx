@@ -13,6 +13,7 @@ type User = {
 type AuthContextType = {
   user: User | null;
   accessToken: string | null;
+  loading: boolean;
   login: (accessToken: string, refreshToken: string) => void;
   logout: () => void;
 };
@@ -20,6 +21,7 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType>({
   user: null,
   accessToken: null,
+  loading: true,
   login: () => {},
   logout: () => {},
 });
@@ -31,16 +33,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.getItem("access_token")
   );
   const refreshToken = localStorage.getItem("refresh_token");
+  const [loading, setLoading] = useState(true);
 
   const fetchUser = async (token: string) => {
     try {
-      const res = await axios
-        .get("http://localhost:8080/api/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-      return setUser(res.data.user);
+      const res = await axios.get("http://localhost:8080/api/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUser(res.data.user);
     } catch {
       logout();
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,6 +53,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("refresh_token", newRefreshToken);
     setAccessToken(newAccessToken);
     fetchUser(newAccessToken);
+    navigate("/dashboard");
   };
 
   const logout = () => {
@@ -56,17 +61,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem("refresh_token");
     setAccessToken(null);
     setUser(null);
+    setLoading(false);
+    navigate("/login");
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    if (token) {
-      navigate("/home");
-    }
-  }, []);
-  // refresh automático
-  useEffect(() => {
-    if (!accessToken && refreshToken) {
+    if (accessToken) {
+      fetchUser(accessToken);
+    } else if (refreshToken) {
       axios
         .post("http://localhost:8080/api/refresh", { refresh_token: refreshToken })
         .then((res) => {
@@ -76,14 +78,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           fetchUser(newToken);
         })
         .catch(() => logout());
-    } else if (accessToken) {
-      fetchUser(accessToken);
+    } else {
+      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, accessToken, login, logout }}>
+    <AuthContext.Provider value={{ user, accessToken, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

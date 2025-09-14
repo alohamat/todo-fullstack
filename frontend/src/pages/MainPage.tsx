@@ -2,10 +2,9 @@ import FeatureCarousel from "../components/FeatureCarousel";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
 import Footer from "../components/Footer";
-
-function click() {
-  console.log("clicked");
-}
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import { useContext } from "react";
 
 
 const features = [
@@ -19,9 +18,16 @@ const features = [
 ]
 
 function MainPage() {
+  const { user, logout, loading } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+  const click = () => {
+    navigate("/dashboard");
+  };
+
   return (
     <div className="bg-zinc-800 min-h-screen min-w-screen">
-      <Navbar isLoggedIn={false} />
+      <Navbar isLoggedIn={!!user} />
       <HeroSection
         title="Organize your life like a monk"
         description="Simple, fast and beautiful."
