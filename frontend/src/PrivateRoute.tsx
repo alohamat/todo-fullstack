@@ -8,13 +8,13 @@ type PrivateRouteProps = { children: ReactNode };
 
 function PrivateRoute({ children }: PrivateRouteProps) {
     const [loading, setLoading] = useState(true);
-    const [accessToken, setAccessToken] = useState<string | null>(localStorage.getItem("access_token"));
-
-    const refreshToken = localStorage.getItem("refresh_token");
+    const [accessToken, setAccessToken] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!accessToken && refreshToken) {
-            axios.post("http://localhost:5173/api/refresh", { refresh_token: refreshToken })
+        const token = localStorage.getItem("access_token");
+        const refreshToken = localStorage.getItem("refresh_token");
+        if (!token && refreshToken) {
+            axios.post("http://localhost:8080/api/refresh", { refresh_token: refreshToken })
                 .then(res => {
                     const newToken = res.data.access_token;
                     localStorage.setItem("access_token", newToken);
@@ -23,9 +23,10 @@ function PrivateRoute({ children }: PrivateRouteProps) {
                 .catch(() => setAccessToken(null))
                 .finally(() => setLoading(false));
         } else {
+            setAccessToken(token);
             setLoading(false);
         }
-    }, [accessToken, refreshToken]);
+    }, []);
 
     if (loading) return <div>Loading...</div>;
     if (!accessToken) return <Navigate to="/register" replace />;

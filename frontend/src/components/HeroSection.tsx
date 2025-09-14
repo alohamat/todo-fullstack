@@ -8,7 +8,7 @@ type HeroProps = {
 
 function HeroSection({title, description, buttonLabel, onButtonClick}: HeroProps) {
     return (
-        <section className="bg-zinc-400 pb-5 pt-3">
+        <section className="flex items-center flex-col bg-zinc-400 pb-5 pt-3">
             <h1 className="text-7xl font-bold">{title}</h1>
             <p className="text-3xl font-medium m-4">{description}</p>
             <button 

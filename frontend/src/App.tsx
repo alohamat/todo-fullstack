@@ -1,30 +1,27 @@
-import { Routes, Route } from 'react-router-dom'
-import MainPage from './pages/MainPage'
-import RegisterPage from './pages/RegisterPage'
-import './App.css'
-import HomePage from './pages/HomePage'
-import PrivateRoute from './PrivateRoute'
+import { Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+
+import MainPage from "./pages/MainPage";
+import RegisterPage from "./pages/RegisterPage";
+import HomePage from "./pages/HomePage";
+// import PrivateRoute from "./PrivateRoute";
 
 function App() {
-  
-
   return (
+    <AuthProvider>
       <Routes>
-        {/* public routes */}
-        <Route path='' element={<MainPage />}/>
-        <Route path='/register' element={<RegisterPage />} />
+        <Route path="/" element={<MainPage />} />
+        <Route path="/register" element={<RegisterPage />} />
 
-        {/*private routes */}
         <Route
-        path='/home'
-        element={
-          <PrivateRoute>
-            <HomePage />
-          </PrivateRoute>
-        }
+          path="/home"
+          element={
+              <HomePage />
+          }
         />
       </Routes>
-  )
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;

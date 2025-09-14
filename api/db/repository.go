@@ -90,3 +90,20 @@ func (r *Repository) DeleteRefreshToken(token string) error {
 	_, err := r.Collection.DeleteOne(ctx, bson.M{"token": token})
 	return err
 }
+
+func (r *Repository) FindByID(id string) (*models.User, error) {
+	ctx, cancel := newCtx()
+	defer cancel()
+
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	var user models.User
+	err = r.Collection.FindOne(ctx, bson.M{"_id": objID}).Decode(&user)
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}

@@ -87,7 +87,10 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		Path:     "/",
 	})
 
-	resp := map[string]string{"access_token": access}
+	resp := map[string]string{
+		"access_token": access,
+		"refresh_token": refresh,
+	}
 	w.WriteHeader(http.StatusOK)
 	if err := json.NewEncoder(w).Encode(resp); err != nil {
 		log.Println("error encoding login response:", err)

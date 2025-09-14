@@ -4,6 +4,7 @@ import (
 	"github.com/alohamat/todo-fullstack/handlers"
 	"github.com/alohamat/todo-fullstack/middlewares"
 	"github.com/gorilla/mux"
+	"net/http"
 )
 
 func InitRouter() *mux.Router {
@@ -13,6 +14,7 @@ func InitRouter() *mux.Router {
 	// public routes
 	router.HandleFunc("/api/register", handlers.RegisterHandler).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/login", handlers.LoginHandler).Methods("POST", "OPTIONS")
+	router.Handle("/api/me", middlewares.AuthMiddleware(http.HandlerFunc(handlers.MeHandler)))
 
 	// protected routes
 	protected := router.PathPrefix("/api").Subrouter()
