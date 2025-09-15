@@ -27,7 +27,7 @@ function Navbar({ isLoggedIn, centerText }: NavbarProps) {
   }
 
   return (
-    <header className="sticky top-0 flex items-center gap-4 bg-zinc-300 w-screen p-4 h-20 justify-between">
+    <header className="sticky top-0 flex items-center gap-4 bg-blue-300 w-screen p-4 h-15 justify-between">
       <div className="flex items-center gap-4">
         <img src="src/assets/todocheck.png" alt="icon" className="size-7 md:size-10" />
         <button className="text-xl md:text-2xl font-bold hover:cursor-pointer hover:underline" onClick={goHome}>To-do</button>
