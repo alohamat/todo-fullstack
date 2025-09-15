@@ -19,7 +19,7 @@ function FeatureCarousel({ features }: FeatureCarouselProps) {
         <div className="overflow-hidden w-full bg-amber-100 py-4">
             <div className="animate-marquee flex w-max gap-4">
                 {repeatedFeatures.map((f, i) => (
-                    <div key={i} className="w-[300px] shrink-0">
+                    <div key={i} className="w-[150px] md:w-[300px] shrink-0">
                         <FeatureCard
                             icon={f.icon}
                             title={f.title}

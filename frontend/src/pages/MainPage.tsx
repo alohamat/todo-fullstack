@@ -18,7 +18,7 @@ const features = [
 ]
 
 function MainPage() {
-  const { user, logout, loading } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const click = () => {
