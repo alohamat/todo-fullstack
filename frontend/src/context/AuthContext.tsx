@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setAccessToken(null);
     setUser(null);
     setLoading(false);
-    navigate("/login");
+    navigate("/register");
   };
 
   useEffect(() => {
