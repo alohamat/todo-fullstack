@@ -14,13 +14,14 @@ func InitRouter() *mux.Router {
 	// public routes
 	router.HandleFunc("/api/register", handlers.RegisterHandler).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/login", handlers.LoginHandler).Methods("POST", "OPTIONS")
+	router.HandleFunc("/api/refresh", handlers.RefreshHandler).Methods("POST", "OPTIONS")
 	router.Handle("/api/me", middlewares.AuthMiddleware(http.HandlerFunc(handlers.MeHandler)))
 
 	// protected routes
 	protected := router.PathPrefix("/api").Subrouter()
 	protected.Use(middlewares.AuthMiddleware)
 
-	protected.HandleFunc("/api/tasks", handlers.TasksHandler).Methods("GET")
+	protected.HandleFunc("/tasks", handlers.TasksHandler).Methods("GET")
 	
 	return router
 }

@@ -3,7 +3,7 @@ import { AuthProvider } from "./context/AuthContext";
 
 import MainPage from "./pages/MainPage";
 import RegisterPage from "./pages/RegisterPage";
-import HomePage from "./pages/Dashboard";
+import Dashboard from "./pages/Dashboard";
 // import PrivateRoute from "./PrivateRoute";
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
         <Route
           path="/dashboard"
           element={
-              <HomePage />
+              <Dashboard />
           }
         />
       </Routes>

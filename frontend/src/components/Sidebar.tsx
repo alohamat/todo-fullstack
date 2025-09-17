@@ -12,14 +12,14 @@ function Sidebar({ isOpen, toggle, children }: SidebarProps) {
   const { user } = useContext(AuthContext);
 
   return (
-    <div
-      className={`fixed left-0 bg-gradient-to-b from-gray-300 to-gray-800 h-screen transition-all duration-200 ease-in-out flex flex-col overflow-hidden
+    // Sidebar container
+    <div 
+    className={`fixed left-0 bg-gradient-to-b from-gray-300 to-gray-800 h-screen transition-all duration-200 ease-in-out overflow-hidden
             ${
-              isOpen ? "w-[70vw] md:w-[15vw] shadow-2xl shadow-black" : "w-16"
+              isOpen ? "w-[70vw] md:w-[15vw] shadow-2xl shadow-black" : "md:flex md:flex-col w-0 md:w-16"
             }`}
     >
-      {/*PC sidebar toggle*/}
-      <div
+      <div 
         className={`flex bg-amber-300 items-center py-2 overflow-hidden  ${
           isOpen ? "justify-between" : "justify-center"
         }`}
@@ -32,6 +32,7 @@ function Sidebar({ isOpen, toggle, children }: SidebarProps) {
             </h1>
           </div>
         )}
+        {/*PC button, mobile is on dashboard*/}
         <button
           type="button"
           onClick={toggle}
