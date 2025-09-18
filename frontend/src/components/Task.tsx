@@ -5,7 +5,7 @@ export default function Task({ text }: {text: string}) {
 
   return (
     <div
-      className="flex items-center cursor-pointer my-2"
+      className="flex items-center cursor-pointer my-2 p-3 rounded-2xl bg-white w-screen mx-auto"
       onClick={() => setChecked(!checked)}
     >
       <svg
@@ -14,7 +14,6 @@ export default function Task({ text }: {text: string}) {
         viewBox="0 0 24 24"
         className="mr-2"
       >
-        {/* Quadrado */}
         <rect
           x="2"
           y="2"
@@ -26,7 +25,6 @@ export default function Task({ text }: {text: string}) {
           }`}
         />
 
-        {/* Check animado */}
         <path
           d="M4 12l6 6L20 6"
           fill="none"

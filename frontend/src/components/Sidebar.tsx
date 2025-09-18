@@ -14,9 +14,9 @@ function Sidebar({ isOpen, toggle, children }: SidebarProps) {
   return (
     // Sidebar container
     <div 
-    className={`fixed left-0 bg-gradient-to-b from-gray-300 to-gray-800 h-screen transition-all duration-200 ease-in-out overflow-hidden
+    className={`fixed left-0 bg-gradient-to-b from-gray-300 to-gray-800 h-screen transition-all duration-200 ease-in-out overflow-hidden z-40
             ${
-              isOpen ? "w-[70vw] md:w-[15vw] shadow-2xl shadow-black" : "md:flex md:flex-col w-0 md:w-16"
+              isOpen ? "w-[70vw] md:w-[30vw] shadow-2xl shadow-black" : "md:flex md:flex-col w-0 md:w-16"
             }`}
     >
       <div 
