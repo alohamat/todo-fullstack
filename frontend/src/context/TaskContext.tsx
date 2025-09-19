@@ -1,7 +1,7 @@
 import { createContext, useState, useContext } from "react";
 
 export type Task = {
-  id: string; // agora é string
+  id: string;
   text: string;
   createdAt: Date;
   dueDate?: Date;
@@ -30,7 +30,7 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
 
   const addTask = (text: string, dueDate?: Date) => {
     const newTask: Task = {
-      id: crypto.randomUUID(), // garante ID único
+      id: crypto.randomUUID(), 
       text,
       createdAt: new Date(),
       dueDate,

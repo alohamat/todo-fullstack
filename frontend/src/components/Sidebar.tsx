@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import LoginPopup from "./LoginPopup";
 
 type SidebarProps = {
   isOpen: boolean;
@@ -13,12 +14,13 @@ type SidebarProps = {
 function Sidebar({ isOpen, toggle, children }: SidebarProps) {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [showLogin, setShowLogin] = useState(false);
 
   function PrivateNavigate(path: string) {
     if (!user) {
-      
+      setShowLogin(true);
     } else {
-      navigate(path);
+      navigate(path); 
     }
   }
 
@@ -58,6 +60,7 @@ function Sidebar({ isOpen, toggle, children }: SidebarProps) {
       <nav
         className="flex flex-col transition-all duration-150 ease"
       >
+        {showLogin && <LoginPopup onClose={() => setShowLogin(false)} />}
         <SidebarItem
           icon={
             <img
@@ -98,10 +101,28 @@ type SidebarChildrenProps = {
 };
 
 function SidebarItem({ icon, text, isOpen, click }: SidebarChildrenProps) {
+  const [showClosed, setShowClosed] = useState(!isOpen);
+
+  useEffect(() => {
+    let timeout: number;
+    if (!isOpen) {
+      timeout = setTimeout(() => setShowClosed(true), 50);
+    } else {
+      setShowClosed(false);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [isOpen]);
+
   return (
-    <div className={`flex items-center gap-4 hover:bg-amber-300 hover:cursor-pointer py-2 transition-all duration-300 ease-in-out ${isOpen ? "" : "justify-center"}`} onClick={click}>
-      <span className="">{icon}</span>
-      {isOpen && <span className="">{text}</span>}
+    <div
+      className={`flex items-center gap-4 hover:bg-amber-300 hover:cursor-pointer py-2 transition-all duration-300 ease-in-out ${
+        showClosed ? "justify-center" : ""
+      }`}
+      onClick={click}
+    >
+      <span>{icon}</span>
+      {isOpen && <span>{text}</span>}
     </div>
   );
 }

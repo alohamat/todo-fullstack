@@ -27,13 +27,13 @@ function TaskPopup({ onClose, onSave }: TaskPopupProps) {
     e.preventDefault();
     if (text.trim() === "") return;
 
-let finalDueDate: Date | undefined;
-  if (dueDate) {
-    const [year, month, day] = dueDate.split("-").map(Number);
-    finalDueDate = new Date(year, month - 1, day); // mês é 0-indexado
-  }
+    let finalDueDate: Date | undefined;
+    if (dueDate) {
+      const [year, month, day] = dueDate.split("-").map(Number);
+      finalDueDate = new Date(year, month - 1, day);
+    }
 
-  onSave(text, finalDueDate);
+    onSave(text, finalDueDate);
     setText("");
     setDueDate("");
     onClose();
@@ -42,7 +42,7 @@ let finalDueDate: Date | undefined;
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-md shadow-lg p-6 w-[90%] max-w-md">
-        <h2 className="text-lg font-bold mb-4">Nova Task</h2>
+        <h2 className="text-lg font-bold mb-4">New Task</h2>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <input
             type="text"
