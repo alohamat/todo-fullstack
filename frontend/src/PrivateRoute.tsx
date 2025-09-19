@@ -29,6 +29,7 @@ function PrivateRoute({ children }: PrivateRouteProps) {
     }, []);
 
     if (loading) return <div>Loading...</div>;
+    // what to do if not logged in
     if (!accessToken) return <Navigate to="/register" replace />;
 
     return <>{children}</>;

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 type SidebarProps = {
   isOpen: boolean;
@@ -8,15 +9,25 @@ type SidebarProps = {
   children?: ReactNode;
 };
 
+
 function Sidebar({ isOpen, toggle, children }: SidebarProps) {
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  function PrivateNavigate(path: string) {
+    if (!user) {
+      
+    } else {
+      navigate(path);
+    }
+  }
 
   return (
     // Sidebar container
     <div 
-    className={`fixed left-0 bg-gradient-to-b from-gray-300 to-gray-800 h-screen transition-all duration-200 ease-in-out overflow-hidden z-40
+    className={`fixed left-0 bg-gradient-to-b from-zinc-300 to-zinc-800 h-screen transition-all duration-200 ease-in-out overflow-hidden z-40
             ${
-              isOpen ? "w-[70vw] md:w-[30vw] shadow-2xl shadow-black" : "md:flex md:flex-col w-0 md:w-16"
+              isOpen ? "w-[70vw] md:w-[30vw] xl:w-[20vw] 2xl:w-[15vw] shadow-2xl shadow-black" : "md:flex md:flex-col w-0 md:w-16"
             }`}
     >
       <div 
@@ -57,6 +68,7 @@ function Sidebar({ isOpen, toggle, children }: SidebarProps) {
           }
           text="All tasks"
           isOpen={isOpen}
+          click={() =>PrivateNavigate("/alltasks")}
         />
         <SidebarItem
           icon={
@@ -82,11 +94,12 @@ type SidebarChildrenProps = {
   icon: ReactNode;
   text: string;
   isOpen: boolean;
+  click?: () => void;
 };
 
-function SidebarItem({ icon, text, isOpen }: SidebarChildrenProps) {
+function SidebarItem({ icon, text, isOpen, click }: SidebarChildrenProps) {
   return (
-    <div className={`flex items-center gap-4 hover:bg-amber-300 hover:cursor-pointer py-2 transition-all duration-300 ease-in-out ${isOpen ? "" : "justify-center"}`}>
+    <div className={`flex items-center gap-4 hover:bg-amber-300 hover:cursor-pointer py-2 transition-all duration-300 ease-in-out ${isOpen ? "" : "justify-center"}`} onClick={click}>
       <span className="">{icon}</span>
       {isOpen && <span className="">{text}</span>}
     </div>
