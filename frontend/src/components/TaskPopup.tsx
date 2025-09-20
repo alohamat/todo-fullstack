@@ -2,30 +2,48 @@ import { useState, useEffect } from "react";
 
 type TaskPopupProps = {
   onClose: () => void;
-  onSave: (text: string, dueDate?: Date) => void;
+  // aceita sync ou async, retorna boolean indicando sucesso
+  onSave: (text: string, dueDate?: Date) => boolean | Promise<boolean>;
 };
 
 function TaskPopup({ onClose, onSave }: TaskPopupProps) {
   const [text, setText] = useState("");
   const [dueDate, setDueDate] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onClose();
-      }
+      if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handleKeyDown);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const todayStr = new Date().toISOString().slice(0, 10);
+
+  const isDateBeforeToday = (s: string) => {
+    if (!s) return false;
+    const [y, m, d] = s.split("-").map(Number);
+    const dt = new Date(y, m - 1, d);
+    dt.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return dt.getTime() < today.getTime();
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (text.trim() === "") return;
+    setError(null);
+
+    if (text.trim() === "") {
+      setError("A task precisa de texto, seu vagabundo.");
+      return;
+    }
+
+    if (isDateBeforeToday(dueDate)) {
+      setError("Data inválida: não pode ser no passado.");
+      return;
+    }
 
     let finalDueDate: Date | undefined;
     if (dueDate) {
@@ -33,16 +51,28 @@ function TaskPopup({ onClose, onSave }: TaskPopupProps) {
       finalDueDate = new Date(year, month - 1, day);
     }
 
-    onSave(text, finalDueDate);
-    setText("");
-    setDueDate("");
-    onClose();
+    // suporta onSave sync ou async
+    const result = await Promise.resolve(onSave(text, finalDueDate));
+
+    if (result) {
+      setText("");
+      setDueDate("");
+      setError(null);
+      onClose();
+    } else {
+      setError("❌ Não dá pra criar tarefa com vencimento no passado!");
+    }
   };
+
+  const saveDisabled = text.trim() === "" || isDateBeforeToday(dueDate);
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-md shadow-lg p-6 w-[90%] max-w-md">
-        <h2 className="text-lg font-bold mb-4">New Task</h2>
+        <header className="flex justify-between mb-4">
+          <h2 className="text-lg font-bold">New Task</h2>
+          <button className="hover:cursor-pointer" onClick={onClose}>✕</button>
+        </header>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <input
             type="text"
@@ -56,7 +86,11 @@ function TaskPopup({ onClose, onSave }: TaskPopupProps) {
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
             className="border px-3 py-2 rounded-md"
+            min={todayStr}
           />
+          {error && (
+            <p className="text-sm text-red-500 mt-1">{error}</p>
+          )}
           <div className="flex gap-2 justify-end">
             <button
               type="button"
@@ -67,7 +101,8 @@ function TaskPopup({ onClose, onSave }: TaskPopupProps) {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-md bg-amber-500 hover:bg-amber-600 text-white transition hover:cursor-pointer"
+              disabled={saveDisabled}
+              className={`px-4 py-2 rounded-md bg-amber-500 hover:bg-amber-600 text-white transition hover:cursor-pointer ${saveDisabled ? "opacity-60 cursor-not-allowed" : ""}`}
             >
               Save
             </button>

@@ -5,7 +5,7 @@ import AuthForm from "../components/AuthForm";
 function RegisterPage() {
     return(
         <div className="bg-zinc-800 min-w-screen min-h-screen">
-            <Navbar isLoggedIn={false} centerText="Authenticate to have access to your lists"/>
+            <Navbar isLoggedIn={false} />
             <h1 className="mb-4 bg-zinc-300 text-2xl font-bold"></h1>
             <AuthForm/>
             <Footer/>

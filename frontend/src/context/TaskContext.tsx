@@ -9,9 +9,10 @@ export type Task = {
 
 type TasksContextType = {
   tasks: Task[];
-  addTask: (text: string, dueDate?: Date) => void;
+  addTask: (text: string, dueDate?: Date) => boolean; // agora retorna boolean
   removeTask: (id: string) => void;
 };
+
 
 const TasksContext = createContext<TasksContextType | undefined>(undefined);
 
@@ -28,9 +29,16 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
     }));
   });
 
-  const addTask = (text: string, dueDate?: Date) => {
+ const isPast = (d: Date) => d.getTime() < Date.now();
+
+  const addTask = (text: string, dueDate?: Date): boolean => {
+    if (dueDate && isPast(dueDate)) {
+      console.warn("Tentou criar task com dueDate no passado — ignorado.");
+      return false;
+    }
+
     const newTask: Task = {
-      id: crypto.randomUUID(), 
+      id: crypto.randomUUID(),
       text,
       createdAt: new Date(),
       dueDate,
@@ -41,6 +49,8 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem("tasks", JSON.stringify(updated));
       return updated;
     });
+
+    return true;
   };
 
   const removeTask = (id: string) => {

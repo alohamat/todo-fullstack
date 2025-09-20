@@ -1,17 +1,18 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { useContext } from "react";
 
 type NavbarProps = {
   isLoggedIn: boolean;
-  centerText?: string;
 };
 
-function Navbar({ isLoggedIn, centerText }: NavbarProps) {
+function Navbar({ isLoggedIn }: NavbarProps) {
 
   const {logout} = useContext(AuthContext);
 
   const navigate = useNavigate();
+  const location = useLocation();
+
   const goLogin = () => {
     navigate('/register');
   };
@@ -26,6 +27,15 @@ function Navbar({ isLoggedIn, centerText }: NavbarProps) {
     navigate('/');
   }
 
+ const centerTextMap: Record<string, string> = {
+    "/": "Welcome",
+    "/dashboard": "Quick Tasks",
+    "/alltasks": "All Tasks",
+    "register": "Authenticate to have access to all features",
+  };
+
+  const centerText = centerTextMap[location.pathname] || "";
+  
   return (
     <header className="sticky top-0 flex items-center gap-4 bg-amber-300 w-screen p-4 h-15 justify-between">
       <div className="flex items-center gap-4">

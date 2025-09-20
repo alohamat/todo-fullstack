@@ -48,7 +48,7 @@ export default function Task({ task }: { task: TaskType }) {
 
        <button
         onClick={() => removeTask(task.id)}
-        className="ml-4 text-red-500 font-bold hover:text-red-700 transition-opacity opacity-0 group-hover:opacity-100"
+        className="ml-4 text-red-500 font-bold hover:text-red-700 transition-opacity xl:opacity-0 xl:group-hover:opacity-100 hover:cursor-pointer"
       >
         ✕
       </button>
