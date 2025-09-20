@@ -31,6 +31,8 @@ function Navbar({ isLoggedIn }: NavbarProps) {
     "/": "Welcome",
     "/dashboard": "Quick Tasks",
     "/alltasks": "All Tasks",
+    "/week": "This week",
+    "/today": "Today",
     "register": "Authenticate to have access to all features",
   };
 

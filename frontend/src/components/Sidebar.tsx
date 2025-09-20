@@ -79,6 +79,7 @@ function Sidebar({ isOpen, toggle, children }: SidebarProps) {
           }
           text="Today"
           isOpen={isOpen}
+          click={() => PrivateNavigate("/today")}
         />
         <SidebarItem
           icon={
@@ -86,6 +87,7 @@ function Sidebar({ isOpen, toggle, children }: SidebarProps) {
           }
           text="Week"
           isOpen={isOpen}
+          click={() => PrivateNavigate("/week")}
         />
       </nav>
       {children}

@@ -19,16 +19,23 @@ function TaskPopup({ onClose, onSave }: TaskPopupProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
 
-  const todayStr = new Date().toISOString().slice(0, 10);
+  // Gera a string YYYY-MM-DD usando data LOCAL
+  const todayStr = (() => {
+    const t = new Date();
+    const y = t.getFullYear();
+    const m = String(t.getMonth() + 1).padStart(2, "0");
+    const d = String(t.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  })();
 
+  // Normaliza string (remove espaços etc)
+  const normalizeDateInput = (s: string) => (s || "").trim();
+
+  // Simple, robust comparison using YYYY-MM-DD lexical order
   const isDateBeforeToday = (s: string) => {
-    if (!s) return false;
-    const [y, m, d] = s.split("-").map(Number);
-    const dt = new Date(y, m - 1, d);
-    dt.setHours(0, 0, 0, 0);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return dt.getTime() < today.getTime();
+    const a = normalizeDateInput(s);
+    if (!a) return false;
+    return a < todayStr;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -88,9 +95,7 @@ function TaskPopup({ onClose, onSave }: TaskPopupProps) {
             className="border px-3 py-2 rounded-md"
             min={todayStr}
           />
-          {error && (
-            <p className="text-sm text-red-500 mt-1">{error}</p>
-          )}
+          {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
           <div className="flex gap-2 justify-end">
             <button
               type="button"

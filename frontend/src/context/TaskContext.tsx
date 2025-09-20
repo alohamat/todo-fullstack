@@ -9,10 +9,9 @@ export type Task = {
 
 type TasksContextType = {
   tasks: Task[];
-  addTask: (text: string, dueDate?: Date) => boolean; // agora retorna boolean
+  addTask: (text: string, dueDate?: Date) => boolean;
   removeTask: (id: string) => void;
 };
-
 
 const TasksContext = createContext<TasksContextType | undefined>(undefined);
 
@@ -29,7 +28,16 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
     }));
   });
 
- const isPast = (d: Date) => d.getTime() < Date.now();
+  // Normaliza para meia-noite local: evita cagadas de timezone/hora
+  const startOfDayLocal = (d: Date) => {
+    const t = new Date(d);
+    t.setHours(0, 0, 0, 0);
+    return t;
+  };
+
+  // Agora "passado" significa: dia escolhido é ANTERIOR ao dia de hoje
+  const isPast = (d: Date) =>
+    startOfDayLocal(d).getTime() < startOfDayLocal(new Date()).getTime();
 
   const addTask = (text: string, dueDate?: Date): boolean => {
     if (dueDate && isPast(dueDate)) {
