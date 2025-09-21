@@ -25,15 +25,15 @@ function Week() {
       .sort((a, b) => a.dueDate!.getTime() - b.dueDate!.getTime());
   }, [tasks, weekRange]);
 
-  const handleSave = (text: string, dueDate?: Date): boolean => {
-    const ok = addTask(text, dueDate);
-    if (!ok) {
-      alert("❌ Can't create a task in the past!");
-      return false;
-    }
-    setIsTaskPopupOpen(false);
-    return true;
-  };
+  const handleSave = async (text: string, dueDate?: Date) => {
+  const ok = await addTask(text, dueDate);
+  if (!ok) {
+    alert("❌ Can't create a task in the past!");
+    return false;
+  }
+  setIsTaskPopupOpen(false);
+  return true;
+};
 
   return (
     <Dashboard>
@@ -72,14 +72,6 @@ function Week() {
           onClose={() => setIsTaskPopupOpen(false)}
         />
       )}
-
-      <button
-        onClick={() => setIsTaskPopupOpen(true)}
-        className="fixed right-6 bottom-6 bg-amber-500 text-white px-4 py-3 rounded-full shadow-lg"
-        aria-label="Add task"
-      >
-        +
-      </button>
     </Dashboard>
   );
 }

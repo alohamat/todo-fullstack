@@ -13,6 +13,10 @@ import (
 
 var Client *mongo.Client
 
+var (
+	TaskRepo *TaskRepository
+)
+
 func InitMongo() *mongo.Client {
 	err := godotenv.Load()
 	if err != nil {
@@ -24,7 +28,7 @@ func InitMongo() *mongo.Client {
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	
+
 	clientOptions := options.Client().ApplyURI(MONGO_URI)
 	client, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {

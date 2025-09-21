@@ -2,21 +2,28 @@ import Dashboard from "../components/Dashboard";
 import Task from "../components/Task";
 import TaskPopup from "../components/TaskPopup";
 import { useTasks } from "../context/TaskContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function AllTasks() {
-  const { tasks, addTask } = useTasks();
+  const { tasks, addTask, fetchTasks } = useTasks();
   const [isTaskPopupOpen, setIsTaskPopupOpen] = useState(false);
 
-  const handleSave = (text: string, dueDate?: Date): boolean => {
-  const ok = addTask(text, dueDate);
-  if (!ok) {
-    alert("❌ Não dá pra criar tarefa com vencimento no passado!");
-    return false;
-  }
-  setIsTaskPopupOpen(false);
-  return true;
-};
+  // Carregar tasks do backend ao montar
+  useEffect(() => {
+    fetchTasks().catch(err => {
+      console.error("❌ Erro ao carregar tasks:", err);
+    });
+  }, [fetchTasks]);
+
+  const handleSave = async (text: string, dueDate?: Date): Promise<boolean> => {
+    const ok = await addTask(text, dueDate);
+    if (!ok) {
+      alert("❌ Can't create a task with due in past!");
+      return false;
+    }
+    setIsTaskPopupOpen(false);
+    return true;
+  };
 
   return (
     <Dashboard>
@@ -39,6 +46,5 @@ function AllTasks() {
     </Dashboard>
   );
 }
-
 
 export default AllTasks;

@@ -4,31 +4,36 @@ import Dashboard from "../components/Dashboard";
 import Task from "../components/Task";
 import TaskPopup from "../components/TaskPopup";
 import { useTasks } from "../context/TaskContext";
-import { startOfDay, endOfDay, isSameDay } from "../utils/dateUtils";
+import { startOfDay, isSameDay } from "../utils/dateUtils";
 
 function Today() {
   const { tasks, addTask } = useTasks();
   const [isTaskPopupOpen, setIsTaskPopupOpen] = useState(false);
 
   const todayTasks = useMemo(() => {
-    const today = new Date();
-    // filter tasks that are due today
-    return tasks
-      .filter((t) => t.dueDate && t.dueDate instanceof Date)
-      .filter((t) => isSameDay(t.dueDate!, today))
-      .sort((a, b) => a.dueDate!.getTime() - b.dueDate!.getTime());
-  }, [tasks]);
+  const today = new Date();
+  return tasks
+    .filter((t) => !!t.dueDate)
+    .filter((t) => {
+      const due = new Date(t.dueDate as any);
+      return isSameDay(due, today)
+    })
+    .sort((a, b) => {
+      const dueA = new Date(a.dueDate as any).getTime();
+      const dueB = new Date(b.dueDate as any).getTime();
+      return dueA - dueB;
+    });
+}, [tasks]);
 
-  const handleSave = (text: string, dueDate?: Date): boolean => {
-    if (!dueDate) dueDate = new Date();
-    const ok = addTask(text, dueDate);
-    if (!ok) {
-      alert("❌ Can't create a task with a past due date!");
-      return false;
-    }
-    setIsTaskPopupOpen(false);
-    return true;
-  };
+  const handleSave = async (text: string, dueDate?: Date) => {
+  const ok = await addTask(text, dueDate);
+  if (!ok) {
+    alert("❌ Can't create a task in the past!");
+    return false;
+  }
+  setIsTaskPopupOpen(false);
+  return true;
+};
 
   const todayLabel = startOfDay(new Date()).toLocaleDateString();
 
@@ -55,14 +60,6 @@ function Today() {
           onClose={() => setIsTaskPopupOpen(false)}
         />
       )}
-
-      <button
-        onClick={() => setIsTaskPopupOpen(true)}
-        className="fixed right-6 bottom-6 bg-amber-500 text-white px-4 py-3 rounded-full shadow-lg hover:bg-amber-600 transition"
-        aria-label="Add task"
-      >
-        +
-      </button>
     </Dashboard>
   );
 }

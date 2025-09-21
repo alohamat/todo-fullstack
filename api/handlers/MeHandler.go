@@ -9,16 +9,19 @@ import (
 	"github.com/alohamat/todo-fullstack/services"
 )
 
+// MeHandler returns the authenticated user's basic info.
 func MeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	userID, ok := middlewares.GetUserID(r)
+	userID, ok := middlewares.GetUserIDFromContext(r)
 	if !ok {
 		http.Error(w, `{"error":"unauthorized"}`, http.StatusUnauthorized)
 		return
 	}
 
-	user, err := services.UsersRepo().FindByID(userID)
+	userHex := userID
+
+	user, err := services.UsersRepo().FindByID(userHex)
 	if err != nil {
 		log.Println("error fetching user:", err)
 		http.Error(w, `{"error":"internal server error"}`, http.StatusInternalServerError)
@@ -31,7 +34,7 @@ func MeHandler(w http.ResponseWriter, r *http.Request) {
 
 	resp := map[string]interface{}{
 		"user": map[string]string{
-			"id":       user.ID.Hex(),
+			"id":       userID,
 			"username": user.Username,
 			"email":    user.Email,
 		},

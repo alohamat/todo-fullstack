@@ -31,3 +31,12 @@ type RefreshToken struct {
 	CreatedAt time.Time `bson:"createdAt"`
 	ExpiresAt time.Time `bson:"expiresAt"`
 }
+type Task struct {
+	ID        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	Text      string             `bson:"text" json:"text"`
+	DueDate   *time.Time         `bson:"dueDate,omitempty" json:"dueDate,omitempty"`
+	Completed bool               `bson:"completed" json:"completed"`
+	UserID    primitive.ObjectID `bson:"userId,omitempty" json:"userId,omitempty"`
+	CreatedAt time.Time `bson:"createdAt"`
+	UpdatedAt time.Time `bson:"updatedAt"`
+}

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 
 type TaskPopupProps = {
   onClose: () => void;
-  // aceita sync ou async, retorna boolean indicando sucesso
   onSave: (text: string, dueDate?: Date) => boolean | Promise<boolean>;
 };
 
@@ -19,7 +18,6 @@ function TaskPopup({ onClose, onSave }: TaskPopupProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
 
-  // Gera a string YYYY-MM-DD usando data LOCAL
   const todayStr = (() => {
     const t = new Date();
     const y = t.getFullYear();
@@ -28,7 +26,6 @@ function TaskPopup({ onClose, onSave }: TaskPopupProps) {
     return `${y}-${m}-${d}`;
   })();
 
-  // Normaliza string (remove espaços etc)
   const normalizeDateInput = (s: string) => (s || "").trim();
 
   // Simple, robust comparison using YYYY-MM-DD lexical order
@@ -43,12 +40,12 @@ function TaskPopup({ onClose, onSave }: TaskPopupProps) {
     setError(null);
 
     if (text.trim() === "") {
-      setError("A task precisa de texto, seu vagabundo.");
+      setError("Task can't be empty");
       return;
     }
 
     if (isDateBeforeToday(dueDate)) {
-      setError("Data inválida: não pode ser no passado.");
+      setError("Invalid date");
       return;
     }
 
@@ -67,7 +64,7 @@ function TaskPopup({ onClose, onSave }: TaskPopupProps) {
       setError(null);
       onClose();
     } else {
-      setError("❌ Não dá pra criar tarefa com vencimento no passado!");
+      setError("❌ Can't create a task that expires in past");
     }
   };
 
@@ -81,6 +78,7 @@ function TaskPopup({ onClose, onSave }: TaskPopupProps) {
           <button className="hover:cursor-pointer" onClick={onClose}>✕</button>
         </header>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          <p>Name:</p>
           <input
             type="text"
             value={text}
@@ -88,6 +86,7 @@ function TaskPopup({ onClose, onSave }: TaskPopupProps) {
             placeholder="Type your task..."
             className="border px-3 py-2 rounded-md"
           />
+          <p>Expire date (Optional): </p>
           <input
             type="date"
             value={dueDate}
