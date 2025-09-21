@@ -84,7 +84,7 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
         return;
       }
       const data: any[] = await res.json();
-      const mapped = data.map(toTask);
+      const mapped = (data ?? []).map(toTask); // guarantes to never be null
       setTasks(mapped);
       persist(mapped);
     } catch (err) {
@@ -138,7 +138,6 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
       });
       console.log("[addTask] response status:", res.status);
       if (!res.ok) {
-        // revert optimistic update
         setTasks((prev) => {
           const updated = prev.filter((t) => t.id !== tempTask.id);
           console.warn("[addTask] server response:", text);
@@ -159,12 +158,13 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
       return true;
     } catch (err) {
       console.warn("Network error creating task; kept local optimistic version", err);
-      return true; // treat local optimistic as success
+      return true;
     }
   };
 
-  // Delete (optimistic)
   const removeTask = async (id: string): Promise<void> => {
+    console.log("delete called");
+    
     const prev = tasks;
     setTasks((p) => {
       const updated = p.filter((t) => t.id !== id);
@@ -180,8 +180,10 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
         method: "DELETE",
         headers: authHeaders(),
       });
+      console.log("sent delete req");
       if (!res.ok) {
         // revert on failure
+        console.warn("fail to delete task");
         setTasks(prev);
         persist(prev);
       }

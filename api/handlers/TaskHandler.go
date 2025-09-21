@@ -197,6 +197,7 @@ if err != nil {
 // Delete a task only if the authenticated user owns it.
 func DeleteTaskHandler(w http.ResponseWriter, r *http.Request) {
    	userIDStr, ok := middlewares.GetUserIDFromContext(r)
+	log.Println("received delete req")
 if !ok {
     http.Error(w, "unauthorized to delete", http.StatusUnauthorized)
     return
