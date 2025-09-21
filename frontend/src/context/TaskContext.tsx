@@ -128,7 +128,6 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
       if (dueDate) body.dueDate = dueDate.toISOString(); // server accepts RFC3339
       console.log("[addTask] token:", getToken());
       console.log("[addTask] body:", body);
-      console.log("TOKEN NO LOCALSTORAGE:", localStorage.getItem("token"));
 
 
       const res = await fetch(`${API_BASE}/api/tasks`, {

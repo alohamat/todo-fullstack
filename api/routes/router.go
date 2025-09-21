@@ -22,10 +22,10 @@ func InitRouter() *mux.Router {
 	protected.Use(middlewares.AuthMiddleware)
 
 	// Task routes
-	protected.HandleFunc("/tasks", handlers.TasksHandler).Methods("GET")
-	protected.HandleFunc("/tasks", handlers.CreateTaskHandler).Methods("POST")
-	protected.HandleFunc("/tasks/{id}", handlers.UpdateTaskHandler).Methods("PUT")
-	protected.HandleFunc("/tasks/{id}", handlers.DeleteTaskHandler).Methods("DELETE")
+	protected.HandleFunc("/tasks", handlers.TasksHandler).Methods("GET", "OPTIONS")
+	protected.HandleFunc("/tasks", handlers.CreateTaskHandler).Methods("POST", "OPTIONS")
+	protected.HandleFunc("/tasks/{id}", handlers.UpdateTaskHandler).Methods("PUT", "OPTIONS")
+	protected.HandleFunc("/tasks/{id}", handlers.DeleteTaskHandler).Methods("DELETE", "OPTIONS")
 
 	return router
 }
