@@ -18,15 +18,24 @@ import (
 // Returns all tasks for the authenticated user.
 func TasksHandler(w http.ResponseWriter, r *http.Request) {
 	// Get userId injected by auth middleware (should be a primitive.ObjectID)
-	userId, ok := r.Context().Value("userId").(primitive.ObjectID)
-	if !ok {
-		http.Error(w, "unauthorized", http.StatusUnauthorized)
+	userIDStr, ok := middlewares.GetUserIDFromContext(r)
+	if !ok || userIDStr == "" {
+		http.Error(w, "unauthorized - missing user id", http.StatusUnauthorized)
 		return
 	}
 
-	// Use the TaskRepo instance (initialized in db.InitRepos or helpers)
+	// Convert to Mongo ObjectID
+	userId, err := primitive.ObjectIDFromHex(userIDStr)
+	if err != nil {
+		log.Println("TasksHandler: invalid user id:", userIDStr, err)
+		http.Error(w, "invalid user id", http.StatusBadRequest)
+		return
+	}
+
+	// Fetch tasks from repo (expects primitive.ObjectID)
 	tasks, err := services.TasksRepo().GetTasksByUser(userId)
 	if err != nil {
+		log.Println("TasksHandler: error fetching tasks for user", userId.Hex(), err)
 		http.Error(w, "error fetching tasks", http.StatusInternalServerError)
 		return
 	}

@@ -15,7 +15,7 @@ func InitRouter() *mux.Router {
 	router.HandleFunc("/api/register", handlers.RegisterHandler).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/login", handlers.LoginHandler).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/refresh", handlers.RefreshHandler).Methods("POST", "OPTIONS")
-	router.Handle("/api/me", middlewares.AuthMiddleware(http.HandlerFunc(handlers.MeHandler)))
+	router.Handle("/api/me", middlewares.AuthMiddleware(http.HandlerFunc(handlers.MeHandler))).Methods("GET", "OPTIONS")
 
 	// protected routes (require authentication)
 	protected := router.PathPrefix("/api").Subrouter()

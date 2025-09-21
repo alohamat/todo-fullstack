@@ -79,7 +79,8 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
         headers: authHeaders(),
       });
       if (!res.ok) {
-        // unauthorized or other error — just abort (caller can handle)
+        const text = await res.text();
+      console.warn("[fetchTasks] error response:", text);
         return;
       }
       const data: any[] = await res.json();
