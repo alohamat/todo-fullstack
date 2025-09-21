@@ -21,7 +21,7 @@ const TasksContext = createContext<TasksContextType | undefined>(undefined);
 const API_BASE = "http://localhost:8080"
 
 function getToken() {
-  return localStorage.getItem("token");
+  return localStorage.getItem("access_token");
 }
 
 function authHeaders(): HeadersInit {
@@ -107,7 +107,7 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
     }
 
     const tempTask: Task = {
-      id: crypto.randomUUID(),
+      id: crypto.randomUUID(),  
       text,
       createdAt: new Date(),
       dueDate,
@@ -123,19 +123,25 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
 
     const token = getToken();
     if (!token) return true; // offline/local mode
-
     try {
       const body: any = { text };
       if (dueDate) body.dueDate = dueDate.toISOString(); // server accepts RFC3339
+      console.log("[addTask] token:", getToken());
+      console.log("[addTask] body:", body);
+      console.log("TOKEN NO LOCALSTORAGE:", localStorage.getItem("token"));
+
+
       const res = await fetch(`${API_BASE}/api/tasks`, {
         method: "POST",
         headers: authHeaders(),
         body: JSON.stringify(body),
       });
+      console.log("[addTask] response status:", res.status);
       if (!res.ok) {
         // revert optimistic update
         setTasks((prev) => {
           const updated = prev.filter((t) => t.id !== tempTask.id);
+          console.warn("[addTask] server response:", text);
           persist(updated);
           return updated;
         });

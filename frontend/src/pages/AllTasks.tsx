@@ -1,29 +1,21 @@
 import Dashboard from "../components/Dashboard";
 import Task from "../components/Task";
-import TaskPopup from "../components/TaskPopup";
 import { useTasks } from "../context/TaskContext";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 function AllTasks() {
-  const { tasks, addTask, fetchTasks } = useTasks();
-  const [isTaskPopupOpen, setIsTaskPopupOpen] = useState(false);
+  const { tasks, fetchTasks } = useTasks();
+
+  useEffect(() => {
+    console.log("AllTasks mounted");
+  }, []);
 
   // Carregar tasks do backend ao montar
   useEffect(() => {
-    fetchTasks().catch(err => {
+    fetchTasks().catch((err) => {
       console.error("❌ Erro ao carregar tasks:", err);
     });
   }, [fetchTasks]);
-
-  const handleSave = async (text: string, dueDate?: Date): Promise<boolean> => {
-    const ok = await addTask(text, dueDate);
-    if (!ok) {
-      alert("❌ Can't create a task with due in past!");
-      return false;
-    }
-    setIsTaskPopupOpen(false);
-    return true;
-  };
 
   return (
     <Dashboard>
@@ -36,13 +28,6 @@ function AllTasks() {
           tasks.map((task) => <Task key={task.id} task={task} />)
         )}
       </div>
-
-      {isTaskPopupOpen && (
-        <TaskPopup
-          onSave={handleSave}
-          onClose={() => setIsTaskPopupOpen(false)}
-        />
-      )}
     </Dashboard>
   );
 }

@@ -87,6 +87,7 @@ if err != nil {
 		UserID:    userId,
 	}
 
+	log.Println("about to insert task", task)
 	oid, err := services.TasksRepo().InsertTask(task)
 	if err != nil {
 		http.Error(w, "error inserting task", http.StatusInternalServerError)
