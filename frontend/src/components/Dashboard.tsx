@@ -38,10 +38,13 @@ function Dashboard({ children }: DashboardProps) {
   const { addTask } = useTasks();
 
 const handleSave = async (text: string, dueDate?: Date) => {
-  console.log("Dashboard.handleSave called", { text, dueDate });
   const ok = await addTask(text, dueDate);
-  console.log("Dashboard.addTask result:", ok);
-  return ok;
+  if (!ok) {
+    alert("❌ Can't create a task in the past!");
+    return false;
+  }
+  setIsTaskPopupOpen(false);
+  return true;
 };
 
 

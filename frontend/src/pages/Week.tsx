@@ -1,13 +1,11 @@
 import { useState, useMemo } from "react";
 import Dashboard from "../components/Dashboard";
 import Task from "../components/Task";
-import TaskPopup from "../components/TaskPopup";
 import { useTasks } from "../context/TaskContext";
 import { startOfWeek, endOfWeek } from "../utils/dateUtils";
 
 function Week() {
-  const { tasks, addTask } = useTasks();
-  const [isTaskPopupOpen, setIsTaskPopupOpen] = useState(false);
+  const { tasks } = useTasks();
   const [weekStartDay, setWeekStartDay] = useState<0 | 1>(0); // 0=Sunday, 1=Monday
 
   const weekRange = useMemo(() => {
@@ -21,19 +19,12 @@ function Week() {
   const weekTasks = useMemo(() => {
     return tasks
       .filter((t) => t.dueDate)
-      .filter((t) => t.dueDate! >= weekRange.from && t.dueDate! <= weekRange.to)
-      .sort((a, b) => a.dueDate!.getTime() - b.dueDate!.getTime());
+      .filter((t) => {
+        const due = new Date(t.dueDate as any);
+        return due >= weekRange.from && due <= weekRange.to;
+      })
+      .sort((a, b) => new Date(a.dueDate as any).getTime() - new Date(b.dueDate as any).getTime());
   }, [tasks, weekRange]);
-
-  const handleSave = async (text: string, dueDate?: Date) => {
-  const ok = await addTask(text, dueDate);
-  if (!ok) {
-    alert("❌ Can't create a task in the past!");
-    return false;
-  }
-  setIsTaskPopupOpen(false);
-  return true;
-};
 
   return (
     <Dashboard>
@@ -65,13 +56,6 @@ function Week() {
           weekTasks.map((task) => <Task key={task.id} task={task} />)
         )}
       </div>
-
-      {isTaskPopupOpen && (
-        <TaskPopup
-          onSave={handleSave}
-          onClose={() => setIsTaskPopupOpen(false)}
-        />
-      )}
     </Dashboard>
   );
 }

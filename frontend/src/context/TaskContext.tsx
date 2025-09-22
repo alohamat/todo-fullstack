@@ -69,7 +69,7 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
 
   const persist = (items: Task[]) => localStorage.setItem("tasks", JSON.stringify(items));
 
-  // Fetch tasks from API and replace local cache if success
+  //fetch tasks from api and replace local cache if success
   const fetchTasks = async () => {
     const token = getToken();
     if (!token) return; // not logged in, keep local cache
@@ -92,7 +92,7 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // --- date helpers (same behavior as before) ---
+  //date helpers (same behavior as before)
   const startOfDayLocal = (d: Date) => {
     const t = new Date(d);
     t.setHours(0, 0, 0, 0);

@@ -1,12 +1,17 @@
 import Dashboard from "../components/Dashboard";
 import Task from "../components/Task";
-import TaskPopup from "../components/TaskPopup";
 import { useTasks } from "../context/TaskContext";
-import { useState } from "react";
+import { useEffect } from "react";
 
 function DashboardPage() {
-  const { tasks, addTask } = useTasks();
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const { tasks, fetchTasks } = useTasks();
+
+  useEffect(() => {
+      fetchTasks().catch((err) => {
+        console.error("❌ Error loading tasks", err);
+      });
+    }, [fetchTasks]);
+
   return (
     <Dashboard>
       <div className="flex flex-col gap-3 mt-6 w-[90%] self-center">
@@ -18,12 +23,6 @@ function DashboardPage() {
           tasks.map((task) => <Task key={task.id} task={task} />)
         )}
       </div>
-      {isPopupOpen && (
-        <TaskPopup
-          onSave={(text, dueDate) => addTask(text, dueDate)}
-          onClose={() => setIsPopupOpen(false)}
-        />
-      )}
     </Dashboard>
   );
 }

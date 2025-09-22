@@ -1,39 +1,19 @@
-// src/pages/Today.tsx
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import Dashboard from "../components/Dashboard";
 import Task from "../components/Task";
-import TaskPopup from "../components/TaskPopup";
 import { useTasks } from "../context/TaskContext";
 import { startOfDay, isSameDay } from "../utils/dateUtils";
 
 function Today() {
-  const { tasks, addTask } = useTasks();
-  const [isTaskPopupOpen, setIsTaskPopupOpen] = useState(false);
+  const { tasks } = useTasks();
 
   const todayTasks = useMemo(() => {
-  const today = new Date();
-  return tasks
-    .filter((t) => !!t.dueDate)
-    .filter((t) => {
-      const due = new Date(t.dueDate as any);
-      return isSameDay(due, today)
-    })
-    .sort((a, b) => {
-      const dueA = new Date(a.dueDate as any).getTime();
-      const dueB = new Date(b.dueDate as any).getTime();
-      return dueA - dueB;
-    });
-}, [tasks]);
-
-  const handleSave = async (text: string, dueDate?: Date) => {
-  const ok = await addTask(text, dueDate);
-  if (!ok) {
-    alert("❌ Can't create a task in the past!");
-    return false;
-  }
-  setIsTaskPopupOpen(false);
-  return true;
-};
+    const today = new Date();
+    return tasks
+      .filter((t) => t.dueDate) // só tasks com dueDate
+      .filter((t) => isSameDay(new Date(t.dueDate as any), today))
+      .sort((a, b) => new Date(a.dueDate as any).getTime() - new Date(b.dueDate as any).getTime());
+  }, [tasks]);
 
   const todayLabel = startOfDay(new Date()).toLocaleDateString();
 
@@ -53,13 +33,6 @@ function Today() {
           todayTasks.map((task) => <Task key={task.id} task={task} />)
         )}
       </div>
-
-      {isTaskPopupOpen && (
-        <TaskPopup
-          onSave={handleSave}
-          onClose={() => setIsTaskPopupOpen(false)}
-        />
-      )}
     </Dashboard>
   );
 }

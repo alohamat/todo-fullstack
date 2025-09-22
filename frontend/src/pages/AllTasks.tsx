@@ -6,14 +6,10 @@ import { useEffect } from "react";
 function AllTasks() {
   const { tasks, fetchTasks } = useTasks();
 
-  useEffect(() => {
-    console.log("AllTasks mounted");
-  }, []);
-
-  // Carregar tasks do backend ao montar
+  // load backend tasks in mount
   useEffect(() => {
     fetchTasks().catch((err) => {
-      console.error("❌ Erro ao carregar tasks:", err);
+      console.error("❌ Error loading tasks", err);
     });
   }, [fetchTasks]);
 
