@@ -6,7 +6,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -18,10 +17,6 @@ var (
 )
 
 func InitMongo() *mongo.Client {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("error, check your .env")
-	}
 	MONGO_URI := os.Getenv("MONGO_URI")
 	if MONGO_URI == "" {
 		log.Fatal("uri not found in .env")

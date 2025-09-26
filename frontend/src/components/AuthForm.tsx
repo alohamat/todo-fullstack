@@ -5,6 +5,8 @@ import InputForm from "./InputForm";
 import LabelForm from "./LabelForm";
 import { AuthContext } from "../context/AuthContext";
 
+const API_BASE = "todo-fullstack-production-e159.up.railway.app"
+
 type FormData = {
   username: string;
   email: string;
@@ -56,11 +58,11 @@ function AuthForm() {
           setLoading(false);
           return;
         }
-        await axios.post("http://localhost:8080/api/register", data);
+        await axios.post(`${API_BASE}/api/register`, data);
         setRegistering(false);
         setError("Registered sucessfully! Please login.");
       } else {
-        const res = await axios.post("http://localhost:8080/api/login", data);
+        const res = await axios.post(`${API_BASE}/api/login`, data);
         console.log(res.data);
         if (res.data.access_token && res.data.refresh_token) {
           login(res.data.access_token, res.data.refresh_token);

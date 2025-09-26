@@ -4,6 +4,8 @@ import axios from "axios";
 
 import type { ReactNode } from "react";
 
+const API_BASE = "todo-fullstack-production-e159.up.railway.app"
+
 type User = {
   id: string;
   username: string;
@@ -37,7 +39,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchUser = async (token: string) => {
     try {
-      const res = await axios.get("http://localhost:8080/api/me", {
+      const res = await axios.get(`${API_BASE}/api/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUser(res.data.user);
@@ -70,7 +72,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       fetchUser(accessToken);
     } else if (refreshToken) {
       axios
-        .post("http://localhost:8080/api/refresh", { refresh_token: refreshToken })
+        .post(`${API_BASE}api/refresh`, { refresh_token: refreshToken })
         .then((res) => {
           const newToken = res.data.access_token;
           localStorage.setItem("access_token", newToken);

@@ -18,7 +18,7 @@ type TasksContextType = {
 
 const TasksContext = createContext<TasksContextType | undefined>(undefined);
 
-const API_BASE = "http://localhost:8080"
+const API_BASE = "todo-fullstack-production-e159.up.railway.app"
 
 function getToken() {
   return localStorage.getItem("access_token");
