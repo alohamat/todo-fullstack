@@ -8,7 +8,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -22,11 +21,6 @@ func generateSalt(n int) string {
 }
 
 func HashPassword(password string) (string, string) {
-	err := godotenv.Load()
-	if err != nil {
-		log.Println("error loading .env")
-		return "", ""
-	}
 	pepper := os.Getenv("PEPPER")
 
 	salt := generateSalt(16)
@@ -43,18 +37,13 @@ func HashPassword(password string) (string, string) {
 }
 
 func CheckPassword(password, salt, hash string) bool {
-	err := godotenv.Load()
-	if err != nil {
-		log.Println("error loading .env")
-		return false
-	}
 	pepper := os.Getenv("PEPPER")
 
 	passwordWithSaltAndPepper := password + salt + pepper
 	digest := sha256.Sum256([]byte(passwordWithSaltAndPepper))
 	hashedInput := hex.EncodeToString(digest[:])
 
-	err = bcrypt.CompareHashAndPassword([]byte(hash), []byte(hashedInput))
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(hashedInput))
 	return err == nil
 }
 

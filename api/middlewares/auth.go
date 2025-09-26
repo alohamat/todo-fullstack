@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/joho/godotenv"
 )
 
 var jwtKey []byte
@@ -19,10 +18,6 @@ type ctxKey string
 const userIDKey ctxKey = "userId"
 
 func init() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalln("fail to load .env")
-	}
 	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {
 		log.Fatalln("jwt not found in .env")
