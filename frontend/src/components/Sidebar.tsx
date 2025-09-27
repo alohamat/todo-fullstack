@@ -4,6 +4,7 @@ import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginPopup from "./LoginPopup";
 
+import Menu from "../assets/menu.svg"
 import DefaultAvatar from "../assets/defaultavatar.png"
 import Library from "../assets/library.png"
 import Time from "../assets/time.png"
@@ -63,7 +64,7 @@ function Sidebar({ isOpen, toggle, children }: SidebarProps) {
             isOpen ? "self-end mr-4" : "self-center"
           }`}
         >
-          <img src="src/assets/menu.svg" alt="Menu" className="size-8" />
+          <img src={Menu} alt="Menu" className="size-8" />
         </button>
       </div>
       <hr className="border-gray-400 my-2" />
