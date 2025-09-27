@@ -5,7 +5,7 @@ import InputForm from "./InputForm";
 import LabelForm from "./LabelForm";
 import { AuthContext } from "../context/AuthContext";
 
-const API_BASE = "todo-fullstack-production-e159.up.railway.app"
+const API_BASE = "http://todo-fullstack-production-e159.up.railway.app"
 
 type FormData = {
   username: string;
