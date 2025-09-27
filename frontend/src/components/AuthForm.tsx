@@ -5,6 +5,12 @@ import InputForm from "./InputForm";
 import LabelForm from "./LabelForm";
 import { AuthContext } from "../context/AuthContext";
 
+import UserForm from "../assets/userform.png"
+import EmailForm from "../assets/emailform.png"
+import LockForm from "../assets/lockform.png"
+import ClosedEye from "../assets/closedeye.png"
+import OpenEye from "../assets/openeye.png"
+
 const API_BASE = "https://todo-fullstack-production-e159.up.railway.app"
 
 type FormData = {
@@ -96,7 +102,7 @@ function AuthForm() {
         )}
         <div className="flex items-center gap-2 w-full">
           <LabelForm htmlFor="useremail">
-            <img src="src/assets/emailform.png" alt="icon" className="size-5" />{" "}
+            <img src={EmailForm} alt="icon" className="size-5" />{" "}
             E-mail
           </LabelForm>
           <InputForm
@@ -108,7 +114,7 @@ function AuthForm() {
         </div>
         <div className="flex items-center gap-2 w-full">
           <LabelForm htmlFor="userpassword">
-            <img src="src/assets/lockform.png" alt="icon" className="size-5" />{" "}
+            <img src={LockForm} alt="icon" className="size-5" />{" "}
             Password
           </LabelForm>
           <InputForm
@@ -124,9 +130,9 @@ function AuthForm() {
             tabIndex={-1}
           >
             {showPwd ? (
-              <img src="src/assets/openeye.png" alt="Showing password" />
+              <img src={OpenEye} alt="Showing password" />
             ) : (
-              <img src="src/assets/closedeye.png" alt="Hiding password" />
+              <img src={ClosedEye} alt="Hiding password" />
             )}
           </button>
         </div>
@@ -135,7 +141,7 @@ function AuthForm() {
             <div className="flex items-center gap-2 w-full">
               <LabelForm htmlFor="userconfirmpass">
                 <img
-                  src="src/assets/lockform.png"
+                  src={LockForm}
                   alt="icon"
                   className="size-5"
                 />{" "}
@@ -153,7 +159,7 @@ function AuthForm() {
             <div className="flex items-center gap-2 w-full">
               <LabelForm htmlFor="username">
                 <img
-                  src="src/assets/userform.png"
+                  src={UserForm}
                   alt="icon"
                   className="size-5"
                 />{" "}

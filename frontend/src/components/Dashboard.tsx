@@ -6,6 +6,8 @@ import { createContext, useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useTasks } from "../context/TaskContext";
 
+import Menu from "../assets/menu.svg"
+
 type DashboardProps = {
   children?: React.ReactNode;
 };
@@ -78,7 +80,7 @@ const handleSave = async (text: string, dueDate?: Date) => {
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             >
               <img
-                src="src/assets/menu.svg"
+                src={Menu}
                 alt="Menu"
                 className="h-10 p-1 bg-white rounded-md"
               />

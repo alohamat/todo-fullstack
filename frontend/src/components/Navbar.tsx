@@ -2,6 +2,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { useContext } from "react";
 
+import TodoCheck from "../assets/todocheck.png"
+
 type NavbarProps = {
   isLoggedIn: boolean;
 };
@@ -41,7 +43,7 @@ function Navbar({ isLoggedIn }: NavbarProps) {
   return (
     <header className="sticky top-0 flex items-center gap-4 bg-amber-300 w-screen p-4 h-15 justify-between">
       <div className="flex items-center gap-4">
-        <img src="src/assets/todocheck.png" alt="icon" className="size-7 md:size-10" />
+        <img src={TodoCheck} alt="icon" className="size-7 md:size-10" />
         <button className="text-xl md:text-2xl font-bold hover:cursor-pointer hover:underline" onClick={goHome}>To-do</button>
       </div>
 

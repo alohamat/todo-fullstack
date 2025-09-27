@@ -1,3 +1,5 @@
+import Plus from "../assets/plus.png"
+
 type NewTaskButtonProps = {
   clickTask?: () => void;
   clickNotes?: () => void;
@@ -11,7 +13,7 @@ function NewTaskButton({ clickTask, clickNotes }: NewTaskButtonProps) {
           className="flex gap-2 items-center hover:cursor-pointer"
           onClick={clickTask}
         >
-          <img src="src/assets/plus.png" alt="+" className="h-9"/>
+          <img src={Plus} alt="+" className="h-9"/>
           <p className="text-sm md:text-xl text-white font-bold">Add new task</p>
         </button>
       </div>

@@ -14,7 +14,7 @@ function PrivateRoute({ children }: PrivateRouteProps) {
         const token = localStorage.getItem("access_token");
         const refreshToken = localStorage.getItem("refresh_token");
         if (!token && refreshToken) {
-            axios.post("http://localhost:8080/api/refresh", { refresh_token: refreshToken })
+            axios.post("https://todo-fullstack-production-e159.up.railway.app/api/refresh", { refresh_token: refreshToken })
                 .then(res => {
                     const newToken = res.data.access_token;
                     localStorage.setItem("access_token", newToken);

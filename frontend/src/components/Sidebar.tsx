@@ -4,6 +4,11 @@ import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginPopup from "./LoginPopup";
 
+import DefaultAvatar from "../assets/defaultavatar.png"
+import Library from "../assets/library.png"
+import Time from "../assets/time.png"
+import Calendar from "../assets/calendar.png"
+
 type SidebarProps = {
   isOpen: boolean;
   toggle: () => void;
@@ -41,7 +46,7 @@ function Sidebar({ isOpen, toggle, children }: SidebarProps) {
         {isOpen && (
           <div className="flex items-center gap-4">
             <img
-              src="src/assets/defaultavatar.png"
+              src={DefaultAvatar}
               alt="Avatar"
               className="size-9"
             />
@@ -67,7 +72,7 @@ function Sidebar({ isOpen, toggle, children }: SidebarProps) {
         <SidebarItem
           icon={
             <img
-              src="src/assets/library.png"
+              src={Library}
               alt="All tasks"
               className="size-8"
             />
@@ -78,7 +83,7 @@ function Sidebar({ isOpen, toggle, children }: SidebarProps) {
         />
         <SidebarItem
           icon={
-            <img src="src/assets/time.png" alt="Today" className="size-8" />
+            <img src={Time} alt="Today" className="size-8" />
           }
           text="Today"
           isOpen={isOpen}
@@ -86,7 +91,7 @@ function Sidebar({ isOpen, toggle, children }: SidebarProps) {
         />
         <SidebarItem
           icon={
-            <img src="src/assets/calendar.png" alt="Week" className="size-8" />
+            <img src={Calendar} alt="Week" className="size-8" />
           }
           text="Week"
           isOpen={isOpen}
