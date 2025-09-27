@@ -4,7 +4,7 @@ import axios from "axios";
 
 import type { ReactNode } from "react";
 
-const API_BASE = "http://todo-fullstack-production-e159.up.railway.app"
+const API_BASE = "https://todo-fullstack-production-e159.up.railway.app"
 
 type User = {
   id: string;
